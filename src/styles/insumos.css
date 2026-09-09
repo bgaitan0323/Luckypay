@@ -1,0 +1,1154 @@
+/* =========================================
+   LUCKYPAY - INSUMOS
+   NEGRO + DORADO
+   MENÚ DESPLEGABLE
+   ========================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+.insumos-page {
+  min-height: 100vh;
+  background: #090909;
+  color: #f2f2f2;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* =========================================
+   NAVBAR
+   ========================================= */
+
+.insumos-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 68px;
+  padding: 0 28px;
+  background: #0d0d0d;
+  border-bottom: 1px solid #252525;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 200;
+}
+
+.insumos-navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* BOTÓN 3 RAYITAS */
+
+.insumos-menu-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #303030;
+  background: #111;
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.insumos-menu-btn span {
+  width: 18px;
+  height: 2px;
+  background: #d4af37;
+  border-radius: 3px;
+  transition: 0.25s;
+}
+
+.insumos-menu-btn:hover,
+.insumos-menu-btn.active {
+  background: #191919;
+  border-color: #d4af37;
+}
+
+/* ANIMACIÓN DE LAS RAYITAS */
+
+.insumos-menu-btn.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.insumos-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.insumos-menu-btn.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* =========================================
+   LOGO
+   ========================================= */
+
+.insumos-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: #d4af37;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.insumos-brand img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+/* =========================================
+   USUARIO
+   ========================================= */
+
+.insumos-welcome {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.insumos-welcome-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.insumos-welcome-text strong {
+  color: #ddd;
+  font-size: 13px;
+}
+
+.insumos-welcome-text span {
+  color: #666;
+  font-size: 11px;
+}
+
+.insumos-welcome > button {
+  background: transparent;
+  border: 1px solid #303030;
+  color: #d4af37;
+  padding: 8px 14px;
+  border-radius: 7px;
+
+  cursor: pointer;
+  font-size: 12px;
+  transition: 0.2s;
+}
+
+.insumos-welcome > button:hover {
+  background: #d4af37;
+  color: #111;
+}
+
+/* =========================================
+   FONDO DEL MENÚ
+   ========================================= */
+
+.insumos-menu-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.62);
+
+  z-index: 150;
+
+  animation: insumosFadeOverlay 0.2s ease;
+}
+
+@keyframes insumosFadeOverlay {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   MENÚ LATERAL DESPLEGABLE
+   ========================================= */
+
+.insumos-sidebar {
+  position: fixed;
+  top: 68px;
+  left: 0;
+  bottom: 0;
+
+  width: 275px;
+
+  background: #101010;
+  border-right: 1px solid #303030;
+
+  z-index: 180;
+
+  display: flex;
+  flex-direction: column;
+
+  box-shadow: 15px 0 40px rgba(0, 0, 0, 0.35);
+
+  animation: insumosMenuSlide 0.22s ease;
+}
+
+@keyframes insumosMenuSlide {
+  from {
+    transform: translateX(-100%);
+    opacity: 0.6;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* CABECERA DEL MENÚ */
+
+.insumos-sidebar-header {
+  padding: 22px 20px 18px;
+
+  border-bottom: 1px solid #292929;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.insumos-sidebar-title {
+  color: #d4af37;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
+}
+
+.insumos-sidebar-header p {
+  margin: 5px 0 0;
+
+  color: #707070;
+  font-size: 12px;
+}
+
+/* BOTÓN X */
+
+.insumos-sidebar-close {
+  width: 30px;
+  height: 30px;
+
+  border: 1px solid #333;
+  border-radius: 6px;
+
+  background: #151515;
+  color: #888;
+
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.insumos-sidebar-close:hover {
+  color: #d4af37;
+  border-color: #d4af37;
+}
+
+/* NAVEGACIÓN */
+
+.insumos-sidebar-nav {
+  padding: 15px 12px;
+
+  overflow-y: auto;
+
+  flex: 1;
+}
+
+.insumos-sidebar-item {
+  width: 100%;
+  min-height: 43px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 10px 13px;
+  margin-bottom: 4px;
+
+  border: 0;
+  border-radius: 7px;
+
+  background: transparent;
+
+  color: #aaa;
+
+  text-align: left;
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.insumos-sidebar-item:hover {
+  background: #1b1b1b;
+  color: #fff;
+}
+
+/* ITEM ACTIVO */
+
+.insumos-sidebar-item.active {
+  background: rgba(212, 175, 55, 0.12);
+
+  color: #d4af37;
+
+  border-left: 3px solid #d4af37;
+
+  padding-left: 10px;
+}
+
+.insumos-sidebar-icon {
+  width: 22px;
+
+  text-align: center;
+
+  color: #777;
+
+  font-size: 15px;
+}
+
+.insumos-sidebar-item.active .insumos-sidebar-icon {
+  color: #d4af37;
+}
+
+/* SEPARADOR */
+
+.insumos-sidebar-separator {
+  height: 1px;
+
+  background: #292929;
+
+  margin: 14px 8px;
+}
+
+/* CERRAR SESIÓN */
+
+.insumos-sidebar-bottom {
+  padding: 14px 12px;
+
+  border-top: 1px solid #292929;
+}
+
+.insumos-sidebar-logout {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 11px 13px;
+
+  background: transparent;
+
+  border: 1px solid #303030;
+
+  border-radius: 7px;
+
+  color: #999;
+
+  cursor: pointer;
+
+  font-size: 13px;
+
+  transition: 0.2s;
+}
+
+.insumos-sidebar-logout:hover {
+  color: #d4af37;
+  border-color: #d4af37;
+}
+
+/* =========================================
+   CONTENIDO
+   ========================================= */
+
+.insumos-main {
+  padding: 98px 32px 35px;
+
+  max-width: 1500px;
+
+  margin: 0 auto;
+}
+
+.insumos-heading {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-end;
+
+  gap: 25px;
+
+  margin-bottom: 25px;
+}
+
+.insumos-eyebrow {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #d4af37;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.6px;
+}
+
+.insumos-heading h1 {
+  margin: 0;
+
+  font-size: 29px;
+
+  font-weight: 700;
+
+  color: #f3f3f3;
+}
+
+.insumos-heading p {
+  margin: 7px 0 0;
+
+  color: #777;
+
+  font-size: 13px;
+}
+
+/* BOTÓN NUEVO */
+
+.btn-nuevo-insumo {
+  border: 1px solid #d4af37;
+
+  background: #d4af37;
+
+  color: #111;
+
+  padding: 11px 17px;
+
+  border-radius: 7px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+  white-space: nowrap;
+}
+
+.btn-nuevo-insumo:hover {
+  background: #e2c15a;
+
+  border-color: #e2c15a;
+}
+
+/* =========================================
+   TARJETA
+   ========================================= */
+
+.insumos-card {
+  background: #111;
+
+  border: 1px solid #292929;
+
+  border-radius: 9px;
+
+  overflow: hidden;
+}
+
+.insumos-card-header {
+  min-height: 76px;
+
+  padding: 15px 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border-bottom: 1px solid #292929;
+}
+
+.insumos-card-header h2 {
+  margin: 0;
+
+  color: #eee;
+
+  font-size: 16px;
+}
+
+.insumos-card-header > div:first-child span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #666;
+
+  font-size: 10px;
+}
+
+/* BUSCADOR */
+
+.insumos-search {
+  width: 260px;
+
+  height: 37px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 0 11px;
+
+  background: #0b0b0b;
+
+  border: 1px solid #303030;
+
+  border-radius: 7px;
+}
+
+.insumos-search span {
+  font-size: 12px;
+}
+
+.insumos-search input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #ddd;
+
+  font-size: 11px;
+}
+
+.insumos-search input::placeholder {
+  color: #555;
+}
+
+/* =========================================
+   TABLA
+   ========================================= */
+
+.insumos-table-container {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.insumos-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 900px;
+}
+
+.insumos-table thead {
+  background: #0d0d0d;
+}
+
+.insumos-table th {
+  padding: 13px 16px;
+
+  color: #666;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+
+  text-align: left;
+
+  border-bottom: 1px solid #292929;
+
+  white-space: nowrap;
+}
+
+.insumos-table td {
+  padding: 13px 16px;
+
+  color: #aaa;
+
+  font-size: 11px;
+
+  border-bottom: 1px solid #222;
+
+  vertical-align: middle;
+}
+
+.insumos-table tbody tr {
+  transition: 0.15s;
+}
+
+.insumos-table tbody tr:hover {
+  background: #151515;
+}
+
+.insumos-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* NOMBRE DEL INSUMO */
+
+.insumo-name {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.insumo-icon {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  background: rgba(212, 175, 55, 0.08);
+
+  border: 1px solid rgba(212, 175, 55, 0.18);
+
+  border-radius: 7px;
+
+  font-size: 14px;
+}
+
+.insumo-name strong {
+  color: #ddd;
+
+  font-size: 11px;
+}
+
+/* =========================================
+   ESTADO
+   ========================================= */
+
+.stock-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 5px 8px;
+
+  border-radius: 5px;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.stock-badge.normal {
+  background: rgba(70, 160, 100, 0.09);
+
+  border: 1px solid rgba(70, 160, 100, 0.2);
+
+  color: #82b98e;
+}
+
+.stock-badge.bajo {
+  background: rgba(212, 175, 55, 0.1);
+
+  border: 1px solid rgba(212, 175, 55, 0.23);
+
+  color: #d4af37;
+}
+
+/* =========================================
+   ACCIONES
+   ========================================= */
+
+.insumos-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.action-btn {
+  width: 31px;
+  height: 31px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 6px;
+
+  background: #151515;
+
+  border: 1px solid #303030;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  transition: 0.2s;
+}
+
+.action-btn.edit:hover {
+  border-color: #d4af37;
+
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.action-btn.delete:hover {
+  border-color: #a84d4d;
+
+  background: rgba(168, 77, 77, 0.08);
+}
+
+/* =========================================
+   SIN RESULTADOS
+   ========================================= */
+
+.insumos-empty {
+  padding: 60px 20px;
+
+  text-align: center;
+}
+
+.insumos-empty > div {
+  font-size: 35px;
+
+  margin-bottom: 10px;
+}
+
+.insumos-empty h3 {
+  margin: 0 0 5px;
+
+  color: #ddd;
+
+  font-size: 15px;
+}
+
+.insumos-empty p {
+  margin: 0;
+
+  color: #666;
+
+  font-size: 11px;
+}
+
+/* =========================================
+   MODALES
+   ========================================= */
+
+.modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.75);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  z-index: 500;
+}
+
+.insumo-modal {
+  width: 100%;
+
+  max-width: 570px;
+
+  background: #141414;
+
+  border: 1px solid #363636;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.55);
+}
+
+/* CABECERA MODAL */
+
+.modal-header {
+  min-height: 76px;
+
+  padding: 18px 21px;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  border-bottom: 1px solid #292929;
+}
+
+.modal-header h2 {
+  margin: 0;
+
+  color: #eee;
+
+  font-size: 19px;
+}
+
+.modal-close {
+  width: 31px;
+  height: 31px;
+
+  border: 1px solid #333;
+
+  border-radius: 6px;
+
+  background: #181818;
+
+  color: #888;
+
+  font-size: 21px;
+
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  color: #d4af37;
+
+  border-color: #d4af37;
+}
+
+/* FORMULARIO */
+
+.insumo-modal form {
+  padding: 20px;
+}
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.form-group.full {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  color: #888;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.4px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+
+  height: 39px;
+
+  padding: 0 11px;
+
+  background: #0c0c0c;
+
+  border: 1px solid #303030;
+
+  border-radius: 6px;
+
+  outline: none;
+
+  color: #ddd;
+
+  font-size: 11px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #d4af37;
+}
+
+.form-group input::placeholder {
+  color: #555;
+}
+
+.form-group select option {
+  background: #111;
+
+  color: #ddd;
+}
+
+/* FOOTER MODAL */
+
+.modal-footer {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 9px;
+
+  margin-top: 20px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid #292929;
+}
+
+.btn-cancelar {
+  padding: 9px 15px;
+
+  background: transparent;
+
+  border: 1px solid #333;
+
+  border-radius: 6px;
+
+  color: #999;
+
+  font-size: 11px;
+
+  cursor: pointer;
+}
+
+.btn-cancelar:hover {
+  color: #ddd;
+
+  border-color: #555;
+}
+
+.btn-guardar {
+  padding: 9px 15px;
+
+  background: #d4af37;
+
+  border: 1px solid #d4af37;
+
+  border-radius: 6px;
+
+  color: #111;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.btn-guardar:hover {
+  background: #e2c15a;
+
+  border-color: #e2c15a;
+}
+
+/* =========================================
+   MODAL ELIMINAR
+   ========================================= */
+
+.delete-modal {
+  width: 100%;
+
+  max-width: 400px;
+
+  padding: 28px;
+
+  text-align: center;
+
+  background: #141414;
+
+  border: 1px solid #363636;
+
+  border-radius: 10px;
+
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.55);
+}
+
+.delete-icon {
+  width: 48px;
+  height: 48px;
+
+  margin: 0 auto 14px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(168, 77, 77, 0.1);
+
+  border: 1px solid rgba(168, 77, 77, 0.25);
+
+  border-radius: 9px;
+
+  font-size: 19px;
+}
+
+.delete-modal h2 {
+  margin: 0 0 8px;
+
+  color: #eee;
+
+  font-size: 18px;
+}
+
+.delete-modal p {
+  margin: 0;
+
+  color: #777;
+
+  font-size: 11px;
+
+  line-height: 1.6;
+}
+
+.delete-modal p strong {
+  color: #ccc;
+}
+
+.delete-actions {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 9px;
+
+  margin-top: 22px;
+}
+
+.btn-eliminar {
+  padding: 9px 15px;
+
+  background: #713c3c;
+
+  border: 1px solid #8d4c4c;
+
+  border-radius: 6px;
+
+  color: #eee;
+
+  font-size: 11px;
+
+  cursor: pointer;
+}
+
+.btn-eliminar:hover {
+  background: #8d4c4c;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 900px) {
+  .insumos-main {
+    padding-left: 20px;
+
+    padding-right: 20px;
+  }
+
+  .insumos-heading {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .insumos-card-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .insumos-search {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .insumos-navbar {
+    padding: 0 14px;
+  }
+
+  .insumos-brand span {
+    display: none;
+  }
+
+  .insumos-welcome-text {
+    display: none;
+  }
+
+  .insumos-main {
+    padding: 88px 14px 25px;
+  }
+
+  .insumos-heading h1 {
+    font-size: 25px;
+  }
+
+  .insumos-sidebar {
+    width: 285px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full {
+    grid-column: auto;
+  }
+
+  .insumo-modal {
+    max-height: 90vh;
+
+    overflow-y: auto;
+  }
+}

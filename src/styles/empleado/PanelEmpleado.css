@@ -1,0 +1,1279 @@
+/* =========================================================
+   LUCKYPAY - PANEL EMPLEADO
+   Conversión del panel.css original del ZIP
+   ========================================================= */
+
+.panel-empleado-app {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #f3f4f6 0%, #e5e7eb 100%);
+  overflow-x: hidden;
+  font-family: Arial, sans-serif;
+}
+
+.panel-empleado-app *,
+.panel-empleado-app *::before,
+.panel-empleado-app *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.panel-empleado-app .navbar {
+  height: 60px;
+  background: linear-gradient(
+    90deg,
+    #111827 0%,
+    #374151 55%,
+    #374151 100%
+  );
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 25px;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.panel-empleado-app .menu-btn,
+.panel-empleado-app .admin-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+}
+
+.panel-empleado-app .menu-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+.panel-empleado-app .menu-btn:hover {
+  opacity: 0.85;
+}
+
+.panel-empleado-app .admin-user {
+  cursor: default;
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.panel-empleado-app .sidebar {
+  position: fixed;
+  top: 60px;
+  left: -220px;
+  width: 210px;
+  height: calc(100vh - 60px);
+  background: linear-gradient(
+    180deg,
+    #1f2937 0%,
+    #111827 100%
+  );
+  padding-top: 15px;
+  transition: 0.3s;
+  z-index: 900;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.panel-empleado-app .sidebar.active {
+  left: 0;
+}
+
+.panel-empleado-app .sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.panel-empleado-app .sidebar li {
+  margin: 5px 10px;
+}
+
+.panel-empleado-app .sidebar-link {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 12px;
+  transition: 0.3s;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.panel-empleado-app .sidebar-link:hover {
+  background: #4b5563;
+  transform: translateX(5px);
+}
+
+.panel-empleado-app .sidebar-link.activo {
+  background: linear-gradient(
+    90deg,
+    #374151,
+    #4b5563
+  );
+  color: white;
+  font-weight: bold;
+}
+
+.panel-empleado-app .sidebar-link i {
+  width: 18px;
+  text-align: center;
+}
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.panel-empleado-app main {
+  max-width: 1400px;
+  margin: auto;
+  padding: 80px 24px 40px;
+}
+
+/* =========================================================
+   BIENVENIDA
+   ========================================================= */
+
+.panel-empleado-app .bienvenida {
+  background: linear-gradient(
+    120deg,
+    #111827 0%,
+    #4b5563 60%,
+    #374151 100%
+  );
+  border-radius: 20px;
+  padding: 28px 32px;
+  color: white;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.panel-empleado-app .bienvenida-texto h1 {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 6px;
+}
+
+.panel-empleado-app .bienvenida-texto p {
+  font-size: 14px;
+  opacity: 0.8;
+  margin: 0 0 10px;
+}
+
+.panel-empleado-app .badge-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  backdrop-filter: blur(4px);
+}
+
+.panel-empleado-app .badge-live .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d1d5db;
+  animation: panelEmpleadoPulso 1.6s infinite;
+}
+
+@keyframes panelEmpleadoPulso {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(1.4);
+  }
+}
+
+.panel-empleado-app .bienvenida-fecha {
+  text-align: right;
+  opacity: 0.75;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   ACCESOS RÁPIDOS
+   ========================================================= */
+
+.panel-empleado-app .seccion-titulo {
+  font-size: 13px;
+  font-weight: 800;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-empleado-app .accesos-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.panel-empleado-app .acceso {
+  background: white;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 14px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #1f2937;
+  transition: 0.2s;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.panel-empleado-app .acceso:hover {
+  border-color: #374151;
+  background: #f9fafb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(55, 65, 81, 0.12);
+}
+
+.panel-empleado-app .acceso-icono {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.panel-empleado-app .ac-verde {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.panel-empleado-app .ac-azul {
+  background: #e3eefc;
+  color: #1d4ed8;
+}
+
+.panel-empleado-app .ac-amarillo {
+  background: #f3f4f6;
+  color: #d97706;
+}
+
+.panel-empleado-app .ac-rojo {
+  background: #fbe7e7;
+  color: #b91c1c;
+}
+
+.panel-empleado-app .ac-morado {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.panel-empleado-app .ac-teal {
+  background: #e5e7eb;
+  color: #475569;
+}
+
+.panel-empleado-app .ac-naranja {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.panel-empleado-app .ac-gris {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.panel-empleado-app .acceso span {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* =========================================================
+   KPI
+   ========================================================= */
+
+.panel-empleado-app .tarjetas-kpi {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.panel-empleado-app .tarjeta-kpi {
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.13);
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+.panel-empleado-app .kpi-teal {
+  background: linear-gradient(
+    135deg,
+    #1f2937,
+    #4b5563
+  );
+}
+
+.panel-empleado-app .kpi-verde {
+  background: linear-gradient(
+    135deg,
+    #111827,
+    #374151
+  );
+}
+
+.panel-empleado-app .kpi-vino {
+  background: linear-gradient(
+    135deg,
+    #2b0000,
+    #7b0016
+  );
+}
+
+.panel-empleado-app .kpi-oscuro {
+  background: linear-gradient(
+    135deg,
+    #111827,
+    #374151
+  );
+}
+
+.panel-empleado-app .kpi-azul {
+  background: linear-gradient(
+    135deg,
+    #1f2937,
+    #4b5563
+  );
+}
+
+.panel-empleado-app .kpi-rojo {
+  background: linear-gradient(
+    135deg,
+    #2b0000,
+    #7b0016
+  );
+}
+
+.panel-empleado-app .kpi-amarillo {
+  background: linear-gradient(
+    135deg,
+    #111827,
+    #374151
+  );
+}
+
+.panel-empleado-app .kpi-morado {
+  background: linear-gradient(
+    135deg,
+    #4c1d95,
+    #7c3aed
+  );
+}
+
+/* Tarjeta de alertas */
+
+.panel-empleado-app .tarjeta-kpi.kpi-rojo {
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+
+.panel-empleado-app .tarjeta-kpi.kpi-rojo:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px rgba(123, 0, 22, 0.35);
+}
+
+.panel-empleado-app .kpi-cabeza {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.panel-empleado-app .kpi-icono {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: white;
+}
+
+.panel-empleado-app .kpi-valor {
+  font-size: 26px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.5px;
+}
+
+.panel-empleado-app .kpi-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 600;
+}
+
+.panel-empleado-app .kpi-sub {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.panel-empleado-app .positivo {
+  color: #d1d5db;
+}
+
+.panel-empleado-app .negativo {
+  color: #fca5a5;
+}
+
+.panel-empleado-app .neutro {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.panel-empleado-app .grid-3 {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.panel-empleado-app .grid-2 {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+/* =========================================================
+   PANEL
+   ========================================================= */
+
+.panel-empleado-app .panel {
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.panel-empleado-app .panel-cabeza {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.panel-empleado-app .panel-titulo {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-empleado-app .panel-titulo i {
+  color: #374151;
+}
+
+.panel-empleado-app .panel-sub {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.panel-empleado-app .panel-body {
+  padding: 18px 20px;
+}
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.panel-empleado-app .tabla-wrap {
+  overflow-x: auto;
+}
+
+.panel-empleado-app table.t-panel {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.panel-empleado-app table.t-panel thead th {
+  text-align: left;
+  color: #6b7280;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  padding: 11px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.panel-empleado-app table.t-panel tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #1f2937;
+  vertical-align: middle;
+}
+
+.panel-empleado-app table.t-panel tbody tr:hover {
+  background: #f9fafb;
+}
+
+.panel-empleado-app table.t-panel tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.panel-empleado-app .prod-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.panel-empleado-app .prod-ic {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: #e5e7eb;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.panel-empleado-app .badge-eq {
+  display: inline-block;
+  padding: 3px 9px;
+  background: #e3eefc;
+  color: #1d4ed8;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.panel-empleado-app .badge-na {
+  display: inline-block;
+  padding: 3px 9px;
+  background: #fbe7e7;
+  color: #b91c1c;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   RANKING DE INSUMOS
+   ========================================================= */
+
+.panel-empleado-app .ranking-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.panel-empleado-app .ranking-fila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.panel-empleado-app .ranking-pos {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: #e5e7eb;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.panel-empleado-app .ranking-pos.top1 {
+  background: #f3f4f6;
+  color: #d97706;
+}
+
+.panel-empleado-app .ranking-nombre {
+  font-size: 12px;
+  color: #1f2937;
+  font-weight: 600;
+  min-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.panel-empleado-app .ranking-track {
+  flex: 1;
+  background: #e5e7eb;
+  border-radius: 6px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.panel-empleado-app .ranking-fill {
+  height: 8px;
+  border-radius: 6px;
+  background: #374151;
+  transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.panel-empleado-app .ranking-val {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  min-width: 70px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   MINI STOCK BAR
+   ========================================================= */
+
+.panel-empleado-app .mini-stock-bar {
+  width: 70px;
+  height: 5px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 3px;
+}
+
+.panel-empleado-app .mini-stock-fill {
+  height: 5px;
+  border-radius: 3px;
+  transition: 0.4s;
+}
+
+/* =========================================================
+   CALENDARIO
+   ========================================================= */
+
+.panel-empleado-app .cal-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.panel-empleado-app .cal-mes {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.panel-empleado-app .cal-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: #e5e7eb;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.panel-empleado-app .cal-btn:hover {
+  background: #e5e7eb;
+  color: #1f2937;
+}
+
+.panel-empleado-app .cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+.panel-empleado-app .cal-dia-label {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  padding: 4px 0;
+}
+
+.panel-empleado-app .cal-dia {
+  text-align: center;
+  font-size: 12px;
+  padding: 6px 2px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  position: relative;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.panel-empleado-app .cal-dia:hover:not(.vacio):not(.hoy) {
+  background: #e5e7eb;
+}
+
+.panel-empleado-app .cal-dia.vacio {
+  cursor: default;
+}
+
+.panel-empleado-app .cal-dia.hoy {
+  background: #374151;
+  color: white;
+  font-weight: 800;
+}
+
+.panel-empleado-app .cal-dia.tiene-evento::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #d97706;
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.panel-empleado-app .cal-dia.hoy.tiene-evento::after {
+  background: #d1d5db;
+}
+
+.panel-empleado-app .cal-dia.otro-mes {
+  color: #d1d5db;
+}
+
+.panel-empleado-app .cal-eventos {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.panel-empleado-app .cal-evento {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  background: #f3f4f6;
+  border-left: 3px solid #d97706;
+}
+
+.panel-empleado-app .ev-icono {
+  font-size: 11px;
+  flex-shrink: 0;
+  color: #d97706;
+}
+
+.panel-empleado-app .ev-texto {
+  flex: 1;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.panel-empleado-app .ev-fecha {
+  color: #6b7280;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.panel-empleado-app .modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(12, 30, 28, 0.55);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.panel-empleado-app .modal-overlay.activo {
+  display: flex;
+}
+
+.panel-empleado-app .modal-box {
+  background: white;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+
+.panel-empleado-app .modal-head {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-empleado-app .modal-head h2 {
+  color: #1f2937;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.panel-empleado-app .modal-cerrar {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #6b7280;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.panel-empleado-app .modal-cerrar:hover {
+  background: #e5e7eb;
+}
+
+.panel-empleado-app .modal-body {
+  padding: 22px 24px;
+}
+
+.panel-empleado-app .modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.panel-empleado-app .btn-sec {
+  padding: 10px 18px;
+  background: #e5e7eb;
+  color: #1f2937;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.panel-empleado-app .btn-sec:hover {
+  background: #e5e7eb;
+}
+
+.panel-empleado-app .btn-pri {
+  padding: 10px 20px;
+  background: #374151;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.panel-empleado-app .btn-pri:hover {
+  background: #1f2937;
+}
+
+/* =========================================================
+   ALERTAS
+   ========================================================= */
+
+.panel-empleado-app .alertas-lista {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-empleado-app .alerta-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 0;
+  border-bottom: 1px solid #f3f4f6;
+  transition: 0.2s;
+}
+
+.panel-empleado-app .alerta-item:last-child {
+  border-bottom: none;
+}
+
+.panel-empleado-app .alerta-item.resuelta {
+  opacity: 0.4;
+}
+
+.panel-empleado-app .al-ic {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.panel-empleado-app .al-critica .al-ic {
+  background: #fbe7e7;
+  color: #b91c1c;
+}
+
+.panel-empleado-app .al-advertencia .al-ic {
+  background: #f3f4f6;
+  color: #d97706;
+}
+
+.panel-empleado-app .al-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.panel-empleado-app .al-nombre {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.panel-empleado-app .al-det {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.panel-empleado-app .al-stock {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.panel-empleado-app .al-actual {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.panel-empleado-app .al-critica .al-actual {
+  color: #b91c1c;
+}
+
+.panel-empleado-app .al-advertencia .al-actual {
+  color: #d97706;
+}
+
+.panel-empleado-app .al-min {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.panel-empleado-app .stock-bar {
+  width: 60px;
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 4px 0 0 auto;
+}
+
+.panel-empleado-app .stock-fill {
+  height: 4px;
+  border-radius: 2px;
+}
+
+.panel-empleado-app .sf-critica {
+  background: #b91c1c;
+}
+
+.panel-empleado-app .sf-advertencia {
+  background: #d97706;
+}
+
+.panel-empleado-app .btn-res {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  background: #e5e7eb;
+  color: #6b7280;
+  transition: 0.2s;
+  flex-shrink: 0;
+}
+
+.panel-empleado-app .btn-res:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.panel-empleado-app .badge-alerta-cnt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: #b91c1c;
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 0 5px;
+}
+
+.panel-empleado-app .badge-alerta-cnt.cero {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* =========================================================
+   UMBRALES
+   ========================================================= */
+
+.panel-empleado-app .umbral-fila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.panel-empleado-app .umbral-fila:last-child {
+  border-bottom: none;
+}
+
+.panel-empleado-app .umbral-nombre {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.panel-empleado-app .input-umbral {
+  width: 80px;
+  padding: 8px 10px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 9px;
+  font-size: 13px;
+  color: #1f2937;
+  outline: none;
+  text-align: right;
+}
+
+.panel-empleado-app .input-umbral:focus {
+  border-color: #374151;
+  box-shadow: 0 0 0 2px #cbd5e1;
+}
+
+.panel-empleado-app .umbral-und {
+  font-size: 11px;
+  color: #6b7280;
+  min-width: 28px;
+}
+
+/* =========================================================
+   MODAL EVENTO
+   ========================================================= */
+
+.panel-empleado-app .modal-evento-box {
+  background: white;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+
+.panel-empleado-app .input-texto {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #1f2937;
+  outline: none;
+}
+
+.panel-empleado-app .input-texto:focus {
+  border-color: #374151;
+  box-shadow: 0 0 0 2px #cbd5e1;
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.panel-empleado-app .toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: #1f2937;
+  color: white;
+  padding: 13px 18px;
+  border-radius: 13px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  z-index: 3000;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: 0.35s;
+}
+
+.panel-empleado-app .toast.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* =========================================================
+   SIN ALERTAS
+   ========================================================= */
+
+.panel-empleado-app .sin-alertas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px;
+  color: #6b7280;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .panel-empleado-app .grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .panel-empleado-app .accesos-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .panel-empleado-app .tarjetas-kpi {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .panel-empleado-app .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-empleado-app .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .panel-empleado-app .tarjetas-kpi {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-empleado-app .accesos-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .panel-empleado-app main {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .panel-empleado-app .bienvenida {
+    padding: 22px;
+  }
+
+  .panel-empleado-app .bienvenida-fecha {
+    text-align: left;
+  }
+
+  .panel-empleado-app .navbar {
+    padding: 0 16px;
+  }
+}
