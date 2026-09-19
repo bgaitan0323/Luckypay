@@ -1,0 +1,1467 @@
+/* =========================================================
+   LUCKYPAY - INSUMOS EMPLEADO
+   Tema: Negro + Dorado
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+.insumos-empleado-page {
+  min-height: 100vh;
+  background: #090909;
+  color: #f2f2f2;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.insumos-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 68px;
+
+  padding: 0 28px;
+
+  background: #0d0d0d;
+  border-bottom: 1px solid #292929;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  z-index: 200;
+}
+
+.insumos-navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* =========================================================
+   BOTÓN MENÚ
+========================================================= */
+
+.insumos-menu-btn {
+  width: 40px;
+  height: 40px;
+
+  border: 1px solid #303030;
+  background: #111;
+
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.insumos-menu-btn span {
+  width: 18px;
+  height: 2px;
+
+  background: #d4af37;
+
+  border-radius: 3px;
+
+  transition: 0.25s;
+}
+
+.insumos-menu-btn:hover {
+  background: #191919;
+  border-color: #d4af37;
+}
+
+.insumos-menu-btn.active {
+  background: #191919;
+  border-color: #d4af37;
+}
+
+.insumos-menu-btn.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.insumos-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.insumos-menu-btn.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.insumos-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: #d4af37;
+
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.insumos-brand img {
+  width: 42px;
+  height: 42px;
+
+  object-fit: contain;
+
+  border-radius: 50%;
+}
+
+/* =========================================================
+   USUARIO
+========================================================= */
+
+.insumos-user {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.insumos-user-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  gap: 3px;
+}
+
+.insumos-user-text strong {
+  color: #ddd;
+  font-size: 13px;
+}
+
+.insumos-user-text span {
+  color: #666;
+  font-size: 11px;
+}
+
+.insumos-logout {
+  background: transparent;
+
+  border: 1px solid #303030;
+
+  color: #d4af37;
+
+  padding: 8px 14px;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  transition: 0.2s;
+}
+
+.insumos-logout:hover {
+  background: #d4af37;
+  color: #111;
+}
+
+/* =========================================================
+   OVERLAY
+   TRANSPARENTE COMO EL PANEL PRINCIPAL
+========================================================= */
+
+.insumos-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: transparent;
+
+  z-index: 300;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.insumos-sidebar {
+  position: fixed;
+
+  top: 68px;
+  left: 0;
+  bottom: 0;
+
+  width: 245px;
+
+  background: #0d0d0d;
+
+  border-right: 1px solid #292929;
+
+  z-index: 400;
+
+  display: flex;
+  flex-direction: column;
+
+  box-shadow: 15px 0 35px rgba(0, 0, 0, 0.45);
+}
+
+.insumos-sidebar-header {
+  padding: 22px 20px 17px;
+
+  border-bottom: 1px solid #252525;
+}
+
+.insumos-sidebar-header span {
+  display: block;
+
+  color: #d4af37;
+
+  font-size: 9px;
+
+  letter-spacing: 1.5px;
+
+  font-weight: bold;
+
+  margin-bottom: 5px;
+}
+
+.insumos-sidebar-header strong {
+  color: #eee;
+
+  font-size: 16px;
+}
+
+.insumos-sidebar-nav {
+  padding: 14px 12px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.insumos-sidebar-nav button,
+.insumos-sidebar-bottom button {
+  width: 100%;
+  min-height: 43px;
+
+  padding: 0 13px;
+
+  background: transparent;
+
+  border: 1px solid transparent;
+
+  border-radius: 8px;
+
+  color: #999;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  font-size: 13px;
+
+  transition: 0.2s;
+}
+
+.insumos-sidebar-nav button i,
+.insumos-sidebar-bottom button i {
+  width: 23px;
+
+  text-align: center;
+
+  color: #d4af37;
+}
+
+.insumos-sidebar-nav button:hover,
+.insumos-sidebar-bottom button:hover {
+  background: #181818;
+  color: #eee;
+}
+
+.insumos-sidebar-nav button.activo {
+  background: rgba(212, 175, 55, 0.09);
+
+  border-color: rgba(212, 175, 55, 0.22);
+
+  color: #d4af37;
+}
+
+.insumos-separador {
+  height: 1px;
+
+  background: #292929;
+
+  margin: 7px 14px;
+}
+
+.insumos-sidebar-bottom {
+  margin-top: auto;
+
+  padding: 14px 12px 20px;
+
+  border-top: 1px solid #252525;
+}
+
+/* =========================================================
+   CONTENIDO PRINCIPAL
+========================================================= */
+
+.insumos-main {
+  width: 100%;
+  max-width: 1400px;
+
+  margin: 0 auto;
+
+  padding: 108px 28px 40px;
+}
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.insumos-heading {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 25px;
+
+  margin-bottom: 25px;
+}
+
+.insumos-eyebrow {
+  display: block;
+
+  color: #d4af37;
+
+  font-size: 10px;
+
+  letter-spacing: 1.5px;
+
+  font-weight: bold;
+
+  margin-bottom: 8px;
+}
+
+.insumos-heading h1 {
+  margin: 0;
+
+  color: #f4f4f4;
+
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+.insumos-heading p {
+  margin: 8px 0 0;
+
+  color: #777;
+
+  font-size: 13px;
+}
+
+.insumos-fecha {
+  min-width: 185px;
+
+  padding: 14px 17px;
+
+  background: #111;
+
+  border: 1px solid #292929;
+
+  border-radius: 9px;
+
+  text-align: right;
+}
+
+.insumos-fecha span {
+  display: block;
+
+  color: #d4af37;
+
+  font-size: 9px;
+
+  letter-spacing: 1.2px;
+
+  margin-bottom: 5px;
+}
+
+.insumos-fecha strong {
+  display: block;
+
+  color: #ddd;
+
+  font-size: 13px;
+}
+
+.insumos-fecha small {
+  display: block;
+
+  color: #666;
+
+  font-size: 10px;
+
+  margin-top: 4px;
+}
+
+/* =========================================================
+   ESTADÍSTICAS
+========================================================= */
+
+.insumos-stats {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 14px;
+
+  margin-bottom: 22px;
+}
+
+.insumos-stat {
+  min-height: 102px;
+
+  background: #111;
+
+  border: 1px solid #292929;
+
+  border-radius: 10px;
+
+  padding: 17px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  transition: 0.2s;
+}
+
+.insumos-stat:hover {
+  border-color: #574815;
+
+  transform: translateY(-1px);
+}
+
+.insumos-stat-icon {
+  width: 43px;
+  height: 43px;
+
+  border-radius: 8px;
+
+  border: 1px solid #514214;
+
+  background: rgba(212, 175, 55, 0.08);
+
+  color: #d4af37;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.insumos-stat-icon.warning {
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.insumos-stat div:last-child {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.insumos-stat span {
+  color: #666;
+
+  font-size: 9px;
+
+  letter-spacing: 1.1px;
+}
+
+.insumos-stat strong {
+  color: #f1f1f1;
+
+  font-size: 22px;
+
+  line-height: 1;
+}
+
+.insumos-stat small {
+  color: #666;
+
+  font-size: 10px;
+}
+
+/* =========================================================
+   TARJETA PRINCIPAL
+========================================================= */
+
+.insumos-card {
+  padding: 25px;
+
+  background: #151515;
+
+  border: 1px solid #303030;
+
+  border-radius: 15px;
+}
+
+.insumos-card-header {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+
+  margin-bottom: 22px;
+}
+
+.insumos-card-header span {
+  color: #d4af37;
+
+  font-size: 9px;
+
+  letter-spacing: 1.3px;
+
+  font-weight: bold;
+}
+
+.insumos-card-header h2 {
+  margin: 6px 0 5px;
+
+  color: #eee;
+
+  font-size: 19px;
+}
+
+.insumos-card-header p {
+  margin: 0;
+
+  color: #777;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   BOTÓN NUEVO
+========================================================= */
+
+.insumos-btn-primary {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 11px 17px;
+
+  border: 1px solid #d9a928;
+
+  border-radius: 8px;
+
+  background: linear-gradient(
+    135deg,
+    #b88617,
+    #e1b63b
+  );
+
+  color: #111;
+
+  font-weight: bold;
+
+  font-size: 12px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.insumos-btn-primary:hover {
+  filter: brightness(1.1);
+
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   BUSCADOR
+========================================================= */
+
+.insumos-search {
+  position: relative;
+
+  width: 100%;
+  max-width: 470px;
+
+  margin-bottom: 20px;
+}
+
+.insumos-search > i {
+  position: absolute;
+
+  left: 14px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+.insumos-search input {
+  width: 100%;
+
+  padding: 12px 40px;
+
+  background: #0f0f0f;
+
+  border: 1px solid #333;
+
+  border-radius: 9px;
+
+  color: #fff;
+
+  outline: none;
+
+  font-size: 12px;
+}
+
+.insumos-search input:focus {
+  border-color: #d9a928;
+}
+
+.insumos-search input::placeholder {
+  color: #555;
+}
+
+.insumos-search button {
+  position: absolute;
+
+  right: 10px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  border: 0;
+
+  background: transparent;
+
+  color: #777;
+
+  font-size: 18px;
+
+  cursor: pointer;
+}
+
+.insumos-search button:hover {
+  color: #d4af37;
+}
+
+/* =========================================================
+   TABLA
+========================================================= */
+
+.insumos-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+
+  border-radius: 8px;
+}
+
+.insumos-table {
+  width: 100%;
+
+  min-width: 850px;
+
+  border-collapse: collapse;
+}
+
+.insumos-table th {
+  padding: 13px 12px;
+
+  background: #101010;
+
+  border-bottom: 1px solid #333;
+
+  color: #777;
+
+  text-align: left;
+
+  font-size: 9px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.6px;
+}
+
+.insumos-table td {
+  padding: 14px 12px;
+
+  border-bottom: 1px solid #292929;
+
+  color: #aaa;
+
+  font-size: 11px;
+
+  vertical-align: middle;
+}
+
+.insumos-table tbody tr {
+  transition: 0.2s;
+}
+
+.insumos-table tbody tr:hover {
+  background: #1a1a1a;
+}
+
+/* =========================================================
+   INFORMACIÓN DEL INSUMO
+========================================================= */
+
+.insumo-info {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+}
+
+.insumo-avatar {
+  width: 38px;
+  height: 38px;
+
+  border-radius: 8px;
+
+  border: 1px solid #4b3d12;
+
+  background: rgba(212, 175, 55, 0.08);
+
+  color: #d4af37;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.insumo-info strong {
+  display: block;
+
+  color: #ddd;
+
+  font-size: 12px;
+}
+
+.insumo-info small {
+  display: block;
+
+  color: #555;
+
+  font-size: 9px;
+
+  margin-top: 3px;
+}
+
+/* =========================================================
+   UNIDAD
+========================================================= */
+
+.insumo-unidad {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 5px 8px;
+
+  border-radius: 5px;
+
+  background: #1b1b1b;
+
+  border: 1px solid #2d2d2d;
+
+  color: #aaa;
+
+  font-size: 10px;
+}
+
+.insumo-unidad i {
+  color: #d4af37;
+}
+
+/* =========================================================
+   STOCK
+========================================================= */
+
+.stock-cell {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.stock-bar {
+  width: 85px;
+  height: 6px;
+
+  background: #292929;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+.stock-fill {
+  height: 100%;
+
+  border-radius: 10px;
+
+  transition: width 0.3s;
+}
+
+.stock-fill.ok {
+  background: #9a7d21;
+}
+
+.stock-fill.critico {
+  background: #d4af37;
+}
+
+.stock-cell strong {
+  color: #ddd;
+
+  font-size: 11px;
+}
+
+.minimo-text {
+  color: #888;
+}
+
+/* =========================================================
+   ESTADO
+========================================================= */
+
+.estado-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 5px 8px;
+
+  border-radius: 5px;
+
+  font-size: 9px;
+
+  font-weight: bold;
+
+  text-transform: uppercase;
+}
+
+.estado-badge.ok {
+  color: #c6a936;
+
+  background: rgba(212, 175, 55, 0.08);
+
+  border: 1px solid #4b3d12;
+}
+
+.estado-badge.critico {
+  color: #e0bd38;
+
+  background: rgba(212, 175, 55, 0.1);
+
+  border: 1px solid #5b4811;
+}
+
+/* =========================================================
+   ACCIONES
+========================================================= */
+
+.insumo-acciones {
+  display: flex;
+
+  gap: 6px;
+}
+
+.btn-editar-insumo,
+.btn-eliminar-insumo {
+  width: 31px;
+  height: 31px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  transition: 0.2s;
+}
+
+.btn-editar-insumo {
+  border: 1px solid #3c351f;
+
+  background: #181818;
+
+  color: #d4af37;
+}
+
+.btn-editar-insumo:hover {
+  background: #28230f;
+
+  border-color: #d4af37;
+}
+
+.btn-eliminar-insumo {
+  border: 1px solid #3a2929;
+
+  background: #181818;
+
+  color: #a55;
+}
+
+.btn-eliminar-insumo:hover {
+  background: #271818;
+
+  border-color: #9b4545;
+
+  color: #d66;
+}
+
+/* =========================================================
+   ESTADO VACÍO
+========================================================= */
+
+.insumos-vacio {
+  padding: 55px 20px;
+
+  text-align: center;
+
+  border: 1px dashed #303030;
+
+  border-radius: 10px;
+}
+
+.insumos-vacio > div {
+  width: 52px;
+  height: 52px;
+
+  margin: 0 auto 12px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(212, 175, 55, 0.08);
+
+  border: 1px solid #4d3e14;
+
+  color: #d4af37;
+
+  font-size: 21px;
+}
+
+.insumos-vacio h3 {
+  margin: 0 0 7px;
+
+  color: #ddd;
+
+  font-size: 15px;
+}
+
+.insumos-vacio p {
+  margin: 0 0 15px;
+
+  color: #666;
+
+  font-size: 11px;
+}
+
+.insumos-vacio button {
+  border: 1px solid #4b3d14;
+
+  background: #181818;
+
+  color: #d4af37;
+
+  padding: 8px 13px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  font-size: 10px;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.insumos-footer {
+  text-align: center;
+
+  padding: 22px 16px;
+
+  margin-top: 30px;
+
+  border-top: 1px solid #c9a227;
+
+  color: #8a6d1a;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+.insumos-footer strong {
+  color: #c9a227;
+}
+
+/* =========================================================
+   MODALES
+========================================================= */
+
+.insumos-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  background: rgba(0, 0, 0, 0.78);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+}
+
+.insumos-modal {
+  width: 100%;
+
+  max-width: 560px;
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: #151515;
+
+  border: 1px solid #353535;
+
+  border-radius: 13px;
+
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.65);
+}
+
+.insumos-modal-header {
+  padding: 18px 20px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #2b2b2b;
+}
+
+.insumos-modal-header span {
+  color: #d4af37;
+
+  font-size: 9px;
+
+  letter-spacing: 1.3px;
+
+  font-weight: bold;
+}
+
+.insumos-modal-header h2 {
+  margin: 5px 0 0;
+
+  color: #eee;
+
+  font-size: 18px;
+}
+
+.insumos-modal-header button {
+  width: 32px;
+  height: 32px;
+
+  border: 1px solid #333;
+
+  background: #191919;
+
+  color: #777;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  font-size: 20px;
+}
+
+.insumos-modal-header button:hover {
+  color: #d4af37;
+
+  border-color: #5b4914;
+}
+
+/* =========================================================
+   FORMULARIO
+========================================================= */
+
+.insumos-form {
+  padding: 20px;
+}
+
+.campo {
+  margin-bottom: 16px;
+}
+
+.campo label {
+  display: block;
+
+  color: #aaa;
+
+  font-size: 11px;
+
+  margin-bottom: 6px;
+}
+
+.campo input,
+.campo select {
+  width: 100%;
+
+  padding: 11px 12px;
+
+  border: 1px solid #343434;
+
+  background: #0e0e0e;
+
+  color: #eee;
+
+  border-radius: 7px;
+
+  outline: none;
+
+  font-size: 12px;
+}
+
+.campo input:focus,
+.campo select:focus {
+  border-color: #c49e27;
+}
+
+.campo select option {
+  background: #111;
+
+  color: #eee;
+}
+
+.campo small {
+  display: block;
+
+  color: #5f5f5f;
+
+  font-size: 9px;
+
+  margin-top: 6px;
+
+  line-height: 1.4;
+}
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 13px;
+}
+
+/* =========================================================
+   BOTONES MODAL
+========================================================= */
+
+.insumos-modal-footer {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 9px;
+
+  padding-top: 10px;
+}
+
+.btn-cancelar-insumo,
+.btn-guardar-insumo,
+.btn-confirmar-eliminar {
+  padding: 10px 15px;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  font-size: 11px;
+
+  font-weight: bold;
+}
+
+.btn-cancelar-insumo {
+  border: 1px solid #333;
+
+  background: #191919;
+
+  color: #aaa;
+}
+
+.btn-cancelar-insumo:hover {
+  color: #d4af37;
+
+  border-color: #514214;
+}
+
+.btn-guardar-insumo {
+  border: 1px solid #c69d25;
+
+  background: linear-gradient(
+    135deg,
+    #b88617,
+    #e1b63b
+  );
+
+  color: #111;
+}
+
+.btn-guardar-insumo:hover {
+  filter: brightness(1.1);
+}
+
+/* =========================================================
+   ELIMINAR
+========================================================= */
+
+.eliminar-modal {
+  padding: 25px;
+
+  text-align: center;
+}
+
+.eliminar-icono {
+  width: 52px;
+  height: 52px;
+
+  margin: 0 auto 13px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #c66;
+
+  background: rgba(150, 50, 50, 0.12);
+
+  border: 1px solid #563333;
+}
+
+.eliminar-modal h2 {
+  margin: 0 0 8px;
+
+  color: #eee;
+
+  font-size: 18px;
+}
+
+.eliminar-modal p {
+  margin: 0 0 7px;
+
+  color: #aaa;
+
+  font-size: 12px;
+}
+
+.eliminar-modal p strong {
+  color: #fff;
+}
+
+.eliminar-modal > span {
+  display: block;
+
+  color: #666;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+
+  margin-bottom: 20px;
+}
+
+.btn-confirmar-eliminar {
+  border: 1px solid #7b3434;
+
+  background: #752e2e;
+
+  color: #fff;
+}
+
+.btn-confirmar-eliminar:hover {
+  background: #913838;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.insumos-toast {
+  position: fixed;
+
+  right: 24px;
+  bottom: 24px;
+
+  z-index: 2000;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 12px 16px;
+
+  background: #171717;
+
+  border: 1px solid #5b4915;
+
+  border-radius: 8px;
+
+  color: #ddd;
+
+  font-size: 11px;
+
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+}
+
+.insumos-toast i {
+  color: #d4af37;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+  .insumos-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 750px) {
+  .insumos-main {
+    padding: 95px 15px 30px;
+  }
+
+  .insumos-navbar {
+    padding: 0 15px;
+  }
+
+  .insumos-user-text {
+    display: none;
+  }
+
+  .insumos-heading {
+    flex-direction: column;
+  }
+
+  .insumos-fecha {
+    width: 100%;
+
+    text-align: left;
+  }
+
+  .insumos-card {
+    padding: 17px;
+  }
+
+  .insumos-card-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .insumos-btn-primary {
+    width: 100%;
+  }
+}
+
+@media (max-width: 550px) {
+  .insumos-brand span {
+    display: none;
+  }
+
+  .insumos-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .insumos-modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .btn-cancelar-insumo,
+  .btn-guardar-insumo,
+  .btn-confirmar-eliminar {
+    width: 100%;
+  }
+
+  .insumos-toast {
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+  }
+
+  .insumos-sidebar {
+    width: 230px;
+  }
+}

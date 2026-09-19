@@ -31,35 +31,64 @@ function Configuracion() {
   return (
     <div className="configuracion-page">
 
-      {/* ================= NAVBAR ================= */}
+      {/* =====================================================
+          NAVBAR
+      ===================================================== */}
 
       <header className="configuracion-navbar">
 
-        {/* BOTÓN TRES RAYAS */}
+        {/* BOTÓN MENÚ / X */}
+
         <button
           type="button"
-          className="configuracion-menu-btn"
+          className={`configuracion-menu-btn ${
+            sidebar ? 'activo' : ''
+          }`}
           onClick={() => setSidebar(!sidebar)}
-          aria-label="Abrir menú"
+          aria-label={sidebar ? 'Cerrar menú' : 'Abrir menú'}
         >
-          <span></span>
-          <span></span>
-          <span></span>
+          {sidebar ? (
+            <span className="configuracion-menu-x">×</span>
+          ) : (
+            <>
+              <span></span>
+              <span></span>
+              <span></span>
+            </>
+          )}
         </button>
 
+
         {/* MARCA */}
+
         <div className="configuracion-brand">
-          <img src={logo} alt="LuckyPay" />
+
+          <img
+            src={logo}
+            alt="LuckyPay"
+          />
+
           <span>LuckyPay</span>
+
         </div>
 
+
         {/* BIENVENIDA + SALIR */}
+
         <div className="configuracion-welcome">
 
           <div className="configuracion-user-info">
-            <strong>Bienvenido, Administrador</strong>
-            <span>Gestión de configuración</span>
+
+            <strong>
+              Bienvenido, Administrador
+            </strong>
+
+            <span>
+              Gestión de configuración
+            </span>
+
           </div>
+
 
           <button
             type="button"
@@ -74,7 +103,9 @@ function Configuracion() {
       </header>
 
 
-      {/* ================= OVERLAY ================= */}
+      {/* =====================================================
+          OVERLAY
+      ===================================================== */}
 
       {sidebar && (
         <div
@@ -84,7 +115,9 @@ function Configuracion() {
       )}
 
 
-      {/* ================= SIDEBAR ================= */}
+      {/* =====================================================
+          SIDEBAR
+      ===================================================== */}
 
       <aside
         className={`configuracion-sidebar ${
@@ -92,13 +125,20 @@ function Configuracion() {
         }`}
       >
 
-        {/* CABECERA DEL MENÚ */}
+        {/* CABECERA */}
 
         <div className="configuracion-sidebar-header">
 
           <div>
-            <strong>MENÚ PRINCIPAL</strong>
-            <small>Administración</small>
+
+            <strong>
+              MENÚ PRINCIPAL
+            </strong>
+
+            <small>
+              Administración
+            </small>
+
           </div>
 
           <button
@@ -252,9 +292,12 @@ function Configuracion() {
       </aside>
 
 
-      {/* ================= CONTENIDO ================= */}
+      {/* =====================================================
+          CONTENIDO PRINCIPAL
+      ===================================================== */}
 
       <main className="configuracion-main">
+
 
         {/* CABECERA */}
 
@@ -266,7 +309,9 @@ function Configuracion() {
               ADMINISTRACIÓN
             </span>
 
-            <h1>Configuración</h1>
+            <h1>
+              Configuración
+            </h1>
 
             <p>
               Administra las preferencias generales del sistema.
@@ -275,7 +320,7 @@ function Configuracion() {
           </div>
 
 
-          {/* RUEDA DE CONFIGURACIÓN */}
+          {/* ICONO CONFIGURACIÓN */}
 
           <div className="configuracion-icono">
             ⚙
@@ -284,9 +329,12 @@ function Configuracion() {
         </div>
 
 
-        {/* ================= FORMULARIO ================= */}
+        {/* ===================================================
+            FORMULARIO
+        =================================================== */}
 
         <form onSubmit={guardarConfiguracion}>
+
 
           {/* INFORMACIÓN GENERAL */}
 
@@ -296,7 +344,9 @@ function Configuracion() {
 
               <div>
 
-                <h2>Información general</h2>
+                <h2>
+                  Información general
+                </h2>
 
                 <p>
                   Datos principales de LuckyPay.
@@ -312,6 +362,7 @@ function Configuracion() {
 
 
             <div className="configuracion-grid">
+
 
               {/* EMPRESA */}
 
@@ -399,7 +450,9 @@ function Configuracion() {
           </section>
 
 
-          {/* ================= PREFERENCIAS ================= */}
+          {/* =================================================
+              PREFERENCIAS DEL SISTEMA
+          ================================================= */}
 
           <section className="configuracion-card">
 
@@ -425,6 +478,7 @@ function Configuracion() {
 
 
             <div className="configuracion-preferencias">
+
 
               {/* STOCK */}
 
@@ -478,7 +532,9 @@ function Configuracion() {
           </section>
 
 
-          {/* ================= BOTONES ================= */}
+          {/* =================================================
+              BOTONES
+          ================================================= */}
 
           <div className="configuracion-acciones">
 
@@ -504,7 +560,9 @@ function Configuracion() {
         </form>
 
 
-        {/* ================= MENSAJE ================= */}
+        {/* =================================================
+            MENSAJE GUARDADO
+        ================================================= */}
 
         {guardado && (
           <div className="configuracion-toast">
@@ -517,7 +575,9 @@ function Configuracion() {
         )}
 
 
-        {/* ================= FOOTER ================= */}
+        {/* =================================================
+            FOOTER
+        ================================================= */}
 
         <footer className="configuracion-footer">
 

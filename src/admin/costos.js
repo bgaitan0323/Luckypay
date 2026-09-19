@@ -1,12 +1,15 @@
+
 import React, { useMemo, useState } from 'react';
 import '../styles/costos.css';
 import logo from '../WhatsApp Image 2026-09-04 at 12.00.05.jpeg';
 
 function Costos() {
   const [menuAbierto, setMenuAbierto] = useState(false);
+
   const [productoSeleccionado, setProductoSeleccionado] = useState(
     'Silla ergonómica mod. A'
   );
+
   const [cantidad, setCantidad] = useState(1);
 
   const productos = [
@@ -16,11 +19,31 @@ function Costos() {
       unidad: 'unidad',
       manoObra: 25000,
       insumos: [
-        { nombre: 'Madera pino', cantidad: 3, precio: 18000 },
-        { nombre: 'Tornillos acero', cantidad: 12, precio: 350 },
-        { nombre: 'Tela tapizado', cantidad: 1.5, precio: 22000 },
-        { nombre: 'Espuma relleno', cantidad: 1, precio: 15000 },
-        { nombre: 'Barniz acabado', cantidad: 0.5, precio: 32000 },
+        {
+          nombre: 'Madera pino',
+          cantidad: 3,
+          precio: 18000,
+        },
+        {
+          nombre: 'Tornillos acero',
+          cantidad: 12,
+          precio: 350,
+        },
+        {
+          nombre: 'Tela tapizado',
+          cantidad: 1.5,
+          precio: 22000,
+        },
+        {
+          nombre: 'Espuma relleno',
+          cantidad: 1,
+          precio: 15000,
+        },
+        {
+          nombre: 'Barniz acabado',
+          cantidad: 0.5,
+          precio: 32000,
+        },
       ],
     },
     {
@@ -29,9 +52,21 @@ function Costos() {
       unidad: 'unidad',
       manoObra: 40000,
       insumos: [
-        { nombre: 'Madera pino', cantidad: 5, precio: 18000 },
-        { nombre: 'Tornillos acero', cantidad: 20, precio: 350 },
-        { nombre: 'Barniz acabado', cantidad: 1, precio: 32000 },
+        {
+          nombre: 'Madera pino',
+          cantidad: 5,
+          precio: 18000,
+        },
+        {
+          nombre: 'Tornillos acero',
+          cantidad: 20,
+          precio: 350,
+        },
+        {
+          nombre: 'Barniz acabado',
+          cantidad: 1,
+          precio: 32000,
+        },
       ],
     },
     {
@@ -40,8 +75,16 @@ function Costos() {
       unidad: 'unidad',
       manoObra: 30000,
       insumos: [
-        { nombre: 'Madera pino', cantidad: 2, precio: 18000 },
-        { nombre: 'Pintura base', cantidad: 0.5, precio: 28000 },
+        {
+          nombre: 'Madera pino',
+          cantidad: 2,
+          precio: 18000,
+        },
+        {
+          nombre: 'Pintura base',
+          cantidad: 0.5,
+          precio: 28000,
+        },
       ],
     },
   ];
@@ -67,7 +110,9 @@ function Costos() {
     );
 
     const manoObra = productoActual.manoObra;
+
     const costoUnitario = materiales + manoObra;
+
     const costoProduccion = costoUnitario * cantidad;
 
     return {
@@ -85,10 +130,6 @@ function Costos() {
       maximumFractionDigits: 0,
     }).format(valor);
   };
-
-  /* =========================
-     NAVEGACIÓN
-  ========================= */
 
   const navegar = (ruta) => {
     setMenuAbierto(false);
@@ -114,37 +155,54 @@ function Costos() {
 
       <header className="costos-navbar">
 
-        {/* BOTÓN MENÚ */}
+        <div className="costos-navbar-left">
 
-        <button
-          className={`costos-menu-btn ${
-            menuAbierto ? 'active' : ''
-          }`}
-          onClick={() => setMenuAbierto(!menuAbierto)}
-          aria-label="Abrir menú"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+          {/* BOTÓN MENÚ */}
 
+          <button
+            type="button"
+            className={`costos-menu-btn ${
+              menuAbierto ? 'active' : ''
+            }`}
+            onClick={() =>
+              setMenuAbierto((estado) => !estado)
+            }
+            aria-label={
+              menuAbierto
+                ? 'Cerrar menú'
+                : 'Abrir menú'
+            }
+          >
+            {menuAbierto ? (
+              <span className="costos-menu-x">
+                ×
+              </span>
+            ) : (
+              <>
+                <span></span>
+                <span></span>
+                <span></span>
+              </>
+            )}
+          </button>
 
-        {/* MARCA */}
+          {/* MARCA */}
 
-        <div className="costos-brand">
+          <div className="costos-brand">
 
-          <img
-            src={logo}
-            alt="LuckyPay"
-          />
+            <img
+              src={logo}
+              alt="LuckyPay"
+            />
 
-          <div>
-            <strong>LuckyPay</strong>
-            <small>Control de costos</small>
+            <div>
+              <strong>LuckyPay</strong>
+              <small>Control de costos</small>
+            </div>
+
           </div>
 
         </div>
-
 
         {/* USUARIO */}
 
@@ -163,6 +221,7 @@ function Costos() {
           </div>
 
           <button
+            type="button"
             className="costos-logout-btn"
             onClick={cerrarSesion}
           >
@@ -173,18 +232,17 @@ function Costos() {
 
       </header>
 
-
       {/* =========================
-          OVERLAY
+          OVERLAY TRANSPARENTE
       ========================= */}
 
       {menuAbierto && (
         <div
           className="costos-menu-overlay"
           onClick={() => setMenuAbierto(false)}
-        ></div>
+          aria-hidden="true"
+        />
       )}
-
 
       {/* =========================
           SIDEBAR
@@ -196,28 +254,22 @@ function Costos() {
         }`}
       >
 
+        {/* HEADER */}
+
         <div className="costos-sidebar-header">
 
-          <div>
-            <strong>Menú</strong>
-            <span>Administración</span>
-          </div>
-
-          <button
-            className="costos-sidebar-close"
-            onClick={() => setMenuAbierto(false)}
-          >
-            ×
-          </button>
+          <span className="costos-sidebar-title">
+            MENÚ PRINCIPAL
+          </span>
 
         </div>
 
+        {/* NAVEGACIÓN */}
 
-        <nav>
-
-          {/* INICIO */}
+        <nav className="costos-sidebar-nav">
 
           <button
+            type="button"
             className="costos-sidebar-item"
             onClick={() => navegar('/panel')}
           >
@@ -225,51 +277,44 @@ function Costos() {
             <span>Inicio</span>
           </button>
 
-
-          {/* INSUMOS */}
-
           <button
+            type="button"
             className="costos-sidebar-item"
             onClick={() => navegar('/insumos')}
           >
-            <span className="sidebar-icon">▣</span>
+            <span className="sidebar-icon">▤</span>
             <span>Insumos</span>
           </button>
 
-
-          {/* PRODUCTOS */}
-
           <button
+            type="button"
             className="costos-sidebar-item"
             onClick={() => navegar('/productos')}
           >
-            <span className="sidebar-icon">◈</span>
+            <span className="sidebar-icon">◆</span>
             <span>Productos</span>
           </button>
 
-
-          {/* COSTOS */}
-
-          <button className="costos-sidebar-item active">
-            <span className="sidebar-icon">▤</span>
+          <button
+            type="button"
+            className="costos-sidebar-item active"
+            onClick={() => setMenuAbierto(false)}
+          >
+            <span className="sidebar-icon">$</span>
             <span>Costos</span>
           </button>
 
-
-          {/* META DE VENTAS */}
-
           <button
+            type="button"
             className="costos-sidebar-item"
             onClick={() => navegar('/meta-ventas')}
           >
-            <span className="sidebar-icon">◉</span>
+            <span className="sidebar-icon">◇</span>
             <span>Meta de Ventas</span>
           </button>
 
-
-          {/* USUARIOS */}
-
           <button
+            type="button"
             className="costos-sidebar-item"
             onClick={() => navegar('/usuarios')}
           >
@@ -277,13 +322,10 @@ function Costos() {
             <span>Usuarios y Roles</span>
           </button>
 
-
           <div className="costos-sidebar-separator"></div>
 
-
-          {/* ANÁLISIS */}
-
           <button
+            type="button"
             className="costos-sidebar-item"
             onClick={() => navegar('/analisis')}
           >
@@ -291,32 +333,26 @@ function Costos() {
             <span>Análisis</span>
           </button>
 
-
-          {/* REPORTES */}
-
           <button
+            type="button"
             className="costos-sidebar-item"
             onClick={() => navegar('/reportes')}
           >
-            <span className="costos-sidebar-icon">▤</span>
+            <span className="sidebar-icon">▤</span>
             <span>Reportes</span>
           </button>
 
-
-          {/* AUDITORÍA */}
-
           <button
+            type="button"
             className="costos-sidebar-item"
             onClick={() => navegar('/auditoria')}
           >
-            <span className="costos-sidebar-icon">☷</span>
+            <span className="sidebar-icon">☷</span>
             <span>Auditoría</span>
           </button>
 
-
-          {/* CONFIGURACIÓN */}
-
           <button
+            type="button"
             className="costos-sidebar-item"
             onClick={() => navegar('/configuracion')}
           >
@@ -324,30 +360,32 @@ function Costos() {
             <span>Configuración</span>
           </button>
 
+        </nav>
 
-          <div className="costos-sidebar-separator"></div>
+        {/* CERRAR SESIÓN */}
 
-
-          {/* CERRAR SESIÓN */}
+        <div className="costos-sidebar-bottom">
 
           <button
-            className="costos-sidebar-item logout"
+            type="button"
+            className="costos-sidebar-logout"
             onClick={cerrarSesion}
           >
             <span className="sidebar-icon">↪</span>
             <span>Cerrar sesión</span>
           </button>
 
-        </nav>
+        </div>
 
       </aside>
-
 
       {/* =========================
           CONTENIDO
       ========================= */}
 
       <main className="costos-main">
+
+        {/* ENCABEZADO */}
 
         <div className="costos-heading">
 
@@ -368,7 +406,6 @@ function Costos() {
 
           </div>
 
-
           <div className="costos-fecha">
 
             <span>Estado</span>
@@ -381,12 +418,9 @@ function Costos() {
 
         </div>
 
+        {/* SELECTOR */}
 
-        {/* =========================
-            SELECTOR
-        ========================= */}
-
-        <section className="costos-card costos-selector-card">
+        <section className="costos-card">
 
           <div className="costos-card-header">
 
@@ -404,16 +438,16 @@ function Costos() {
 
           </div>
 
-
           <div className="costos-selector-grid">
 
             <div className="costos-field">
 
-              <label>
+              <label htmlFor="producto">
                 Producto
               </label>
 
               <select
+                id="producto"
                 value={productoSeleccionado}
                 onChange={(e) =>
                   setProductoSeleccionado(e.target.value)
@@ -421,43 +455,43 @@ function Costos() {
               >
 
                 {productos.map((producto) => (
-
                   <option
                     key={producto.id}
                     value={producto.nombre}
                   >
                     {producto.nombre}
                   </option>
-
                 ))}
 
               </select>
 
             </div>
 
-
             <div className="costos-field">
 
-              <label>
+              <label htmlFor="cantidad">
                 Cantidad a producir
               </label>
 
               <input
+                id="cantidad"
                 type="number"
                 min="1"
+                step="1"
                 value={cantidad}
                 onChange={(e) => {
 
                   const valor = Number(e.target.value);
 
                   if (
-                    valor < 1 ||
-                    Number.isNaN(valor)
+                    Number.isNaN(valor) ||
+                    valor < 1
                   ) {
                     setCantidad(1);
-                  } else {
-                    setCantidad(valor);
+                    return;
                   }
+
+                  setCantidad(Math.floor(valor));
 
                 }}
               />
@@ -468,10 +502,7 @@ function Costos() {
 
         </section>
 
-
-        {/* =========================
-            RESUMEN
-        ========================= */}
+        {/* RESUMEN */}
 
         <section className="costos-summary-grid">
 
@@ -495,7 +526,6 @@ function Costos() {
 
           </div>
 
-
           <div className="costos-summary-card">
 
             <div className="costos-summary-icon">
@@ -516,7 +546,6 @@ function Costos() {
 
           </div>
 
-
           <div className="costos-summary-card highlight">
 
             <div className="costos-summary-icon">
@@ -536,7 +565,6 @@ function Costos() {
             </div>
 
           </div>
-
 
           <div className="costos-summary-card">
 
@@ -560,10 +588,7 @@ function Costos() {
 
         </section>
 
-
-        {/* =========================
-            DETALLE
-        ========================= */}
+        {/* DETALLE */}
 
         <section className="costos-card">
 
@@ -587,7 +612,6 @@ function Costos() {
 
           </div>
 
-
           <div className="costos-table-wrapper">
 
             <table className="costos-table">
@@ -603,7 +627,6 @@ function Costos() {
 
               </thead>
 
-
               <tbody>
 
                 {productoActual?.insumos.map(
@@ -614,7 +637,6 @@ function Costos() {
                       insumo.precio;
 
                     return (
-
                       <tr
                         key={`${insumo.nombre}-${index}`}
                       >
@@ -658,11 +680,9 @@ function Costos() {
                         </td>
 
                       </tr>
-
                     );
                   }
                 )}
-
 
                 <tr className="costos-mano-obra-row">
 
@@ -714,7 +734,6 @@ function Costos() {
 
           </div>
 
-
           {/* TOTAL */}
 
           <div className="costos-total-box">
@@ -732,7 +751,6 @@ function Costos() {
               </strong>
 
             </div>
-
 
             <div>
 
@@ -755,10 +773,7 @@ function Costos() {
 
         </section>
 
-
-        {/* =========================
-            INFORMACIÓN
-        ========================= */}
+        {/* INFORMACIÓN */}
 
         <section className="costos-info-grid">
 
@@ -785,7 +800,6 @@ function Costos() {
 
           </div>
 
-
           <div className="costos-info-card">
 
             <div className="costos-info-icon">
@@ -810,10 +824,7 @@ function Costos() {
 
         </section>
 
-
-        {/* =========================
-            FOOTER
-        ========================= */}
+        {/* FOOTER */}
 
         <footer className="costos-footer">
 
@@ -830,8 +841,8 @@ function Costos() {
       </main>
 
     </div>
-    
   );
 }
 
 export default Costos;
+

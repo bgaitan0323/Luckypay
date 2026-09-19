@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import '../styles/empleado/PanelEmpleado.css';
 
+import logo from '../WhatsApp Image 2026-09-04 at 12.00.05.jpeg';
+
 const productosIniciales = [
   { id: 1, nombre: 'Jabón Karité', insumos: [1, 2, 7] },
   { id: 2, nombre: 'Vela Aromática Lavanda', insumos: [3, 7] },
@@ -24,7 +26,7 @@ const insumosIniciales = [
 
 const diasSemana = ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'];
 
-const mesesNombre = [
+const meses = [
   'Enero',
   'Febrero',
   'Marzo',
@@ -39,21 +41,6 @@ const mesesNombre = [
   'Diciembre',
 ];
 
-const mesesMinuscula = [
-  'enero',
-  'febrero',
-  'marzo',
-  'abril',
-  'mayo',
-  'junio',
-  'julio',
-  'agosto',
-  'septiembre',
-  'octubre',
-  'noviembre',
-  'diciembre',
-];
-
 const diasNombre = [
   'Domingo',
   'Lunes',
@@ -64,13 +51,13 @@ const diasNombre = [
   'Sábado',
 ];
 
-function obtenerFechaHoy() {
+function obtenerFecha() {
   const ahora = new Date();
 
   return {
     dia: diasNombre[ahora.getDay()],
     numero: ahora.getDate(),
-    mes: mesesMinuscula[ahora.getMonth()],
+    mes: meses[ahora.getMonth()],
     año: ahora.getFullYear(),
     hora: ahora.toLocaleTimeString('es-CO', {
       hour: '2-digit',
@@ -79,14 +66,12 @@ function obtenerFechaHoy() {
   };
 }
 
-function obtenerFechaISO() {
+function fechaISO() {
   const ahora = new Date();
 
-  const año = ahora.getFullYear();
-  const mes = String(ahora.getMonth() + 1).padStart(2, '0');
-  const dia = String(ahora.getDate()).padStart(2, '0');
-
-  return `${año}-${mes}-${dia}`;
+  return `${ahora.getFullYear()}-${String(
+    ahora.getMonth() + 1
+  ).padStart(2, '0')}-${String(ahora.getDate()).padStart(2, '0')}`;
 }
 
 function PanelEmpleado() {
@@ -95,9 +80,9 @@ function PanelEmpleado() {
   const [productos] = useState(productosIniciales);
   const [insumos, setInsumos] = useState(insumosIniciales);
 
-  const [alertasResueltas, setAlertasResueltas] = useState(new Set());
+  const [fechaHoy, setFechaHoy] = useState(obtenerFecha());
 
-  const [fechaHoy, setFechaHoy] = useState(obtenerFechaHoy());
+  const [alertasResueltas, setAlertasResueltas] = useState(new Set());
 
   const ahora = new Date();
 
@@ -137,15 +122,14 @@ function PanelEmpleado() {
   const [toastMensaje, setToastMensaje] = useState('');
   const [toastVisible, setToastVisible] = useState(false);
 
-  const [eventosDiaSeleccionado, setEventosDiaSeleccionado] =
-    useState(null);
+  const [diaSeleccionado, setDiaSeleccionado] = useState(null);
 
   useEffect(() => {
-    const existeFontAwesome = document.querySelector(
+    const existe = document.querySelector(
       'link[data-luckypay-fontawesome]'
     );
 
-    if (!existeFontAwesome) {
+    if (!existe) {
       const link = document.createElement('link');
 
       link.rel = 'stylesheet';
@@ -162,16 +146,11 @@ function PanelEmpleado() {
   }, []);
 
   useEffect(() => {
-    const actualizarFecha = () => {
-      setFechaHoy(obtenerFechaHoy());
+    const actualizar = () => {
+      setFechaHoy(obtenerFecha());
     };
 
-    actualizarFecha();
-
-    const intervalo = setInterval(
-      actualizarFecha,
-      30000
-    );
+    const intervalo = setInterval(actualizar, 30000);
 
     return () => clearInterval(intervalo);
   }, []);
@@ -200,12 +179,17 @@ function PanelEmpleado() {
     window.location.href = '/';
   };
 
-  const cantidadAlertas = useMemo(() => {
-    return insumos.filter(
-      (insumo) =>
-        !alertasResueltas.has(insumo.id) &&
-        insumo.s < insumo.m
-    ).length;
+  const alertasStock = useMemo(() => {
+    return insumos
+      .filter(
+        (insumo) =>
+          insumo.s < insumo.m &&
+          !alertasResueltas.has(insumo.id)
+      )
+      .sort(
+        (a, b) =>
+          a.s / a.m - b.s / b.m
+      );
   }, [insumos, alertasResueltas]);
 
   const insumosSaludables = useMemo(() => {
@@ -214,48 +198,135 @@ function PanelEmpleado() {
     ).length;
   }, [insumos]);
 
-  const abrirModalAlertas = () => {
-    setModalAlertas(true);
-  };
+  const rankingInsumos = useMemo(() => {
+    const conteo = {};
 
-  const cerrarModalAlertas = () => {
-    setModalAlertas(false);
-  };
-
-  const resolverAlerta = (id) => {
-    setAlertasResueltas((anterior) => {
-      const nuevo = new Set(anterior);
-      nuevo.add(id);
-      return nuevo;
+    productos.forEach((producto) => {
+      producto.insumos.forEach((id) => {
+        conteo[id] = (conteo[id] || 0) + 1;
+      });
     });
 
-    mostrarToast('Alerta marcada como resuelta.');
-  };
+    return Object.entries(conteo)
+      .map(([id, cantidad]) => ({
+        insumo: insumos.find(
+          (item) => item.id === Number(id)
+        ),
+        cantidad,
+      }))
+      .filter((item) => item.insumo)
+      .sort((a, b) => b.cantidad - a.cantidad)
+      .slice(0, 8);
+  }, [productos, insumos]);
 
-  const alertasActivas = useMemo(() => {
-    return insumos
-      .filter((insumo) => insumo.s < insumo.m)
+  const maxRanking = Math.max(
+    ...rankingInsumos.map((item) => item.cantidad),
+    1
+  );
+
+  const stockCritico = useMemo(() => {
+    return [...insumos]
       .sort(
         (a, b) =>
           a.s / a.m - b.s / b.m
-      );
+      )
+      .slice(0, 8);
   }, [insumos]);
 
-  const alertasOrdenadas = useMemo(() => {
-    const pendientes = alertasActivas.filter(
-      (insumo) =>
-        !alertasResueltas.has(insumo.id)
+  const diasDelMes = useMemo(() => {
+    const primerDia = new Date(
+      calYear,
+      calMonth,
+      1
+    ).getDay();
+
+    const cantidadDias = new Date(
+      calYear,
+      calMonth + 1,
+      0
+    ).getDate();
+
+    const resultado = [];
+
+    for (let i = 0; i < primerDia; i++) {
+      resultado.push({
+        vacio: true,
+        numero: null,
+      });
+    }
+
+    for (let dia = 1; dia <= cantidadDias; dia++) {
+      resultado.push({
+        vacio: false,
+        numero: dia,
+      });
+    }
+
+    return resultado;
+  }, [calYear, calMonth]);
+
+  const eventosMes = useMemo(() => {
+    const prefijo = `${calYear}-${String(
+      calMonth + 1
+    ).padStart(2, '0')}`;
+
+    return eventos
+      .filter((evento) =>
+        evento.fecha.startsWith(prefijo)
+      )
+      .sort((a, b) =>
+        a.fecha.localeCompare(b.fecha)
+      );
+  }, [eventos, calYear, calMonth]);
+
+  const tieneEvento = (dia) => {
+    const fecha = `${calYear}-${String(
+      calMonth + 1
+    ).padStart(2, '0')}-${String(dia).padStart(
+      2,
+      '0'
+    )}`;
+
+    return eventos.some(
+      (evento) => evento.fecha === fecha
     );
+  };
 
-    const resueltas = alertasActivas.filter(
-      (insumo) =>
-        alertasResueltas.has(insumo.id)
-    );
+  const eventosParaMostrar = diaSeleccionado
+    ? eventosMes.filter(
+        (evento) =>
+          Number(evento.fecha.split('-')[2]) ===
+          diaSeleccionado
+      )
+    : eventosMes;
 
-    return [...pendientes, ...resueltas];
-  }, [alertasActivas, alertasResueltas]);
+  const cambiarMes = (direccion) => {
+    if (direccion === 'anterior') {
+      if (calMonth === 0) {
+        setCalMonth(11);
+        setCalYear((año) => año - 1);
+      } else {
+        setCalMonth((mes) => mes - 1);
+      }
+    } else {
+      if (calMonth === 11) {
+        setCalMonth(0);
+        setCalYear((año) => año + 1);
+      } else {
+        setCalMonth((mes) => mes + 1);
+      }
+    }
 
-  const abrirModalUmbrales = () => {
+    setDiaSeleccionado(null);
+  };
+
+  const seleccionarDia = (dia) => {
+    if (tieneEvento(dia)) {
+      setDiaSeleccionado(dia);
+    }
+  };
+
+  const abrirUmbrales = () => {
     const valores = {};
 
     insumos.forEach((insumo) => {
@@ -267,32 +338,14 @@ function PanelEmpleado() {
     setModalUmbrales(true);
   };
 
-  const cerrarModalUmbrales = () => {
-    setModalUmbrales(false);
-  };
-
-  const cancelarUmbrales = () => {
-    setModalUmbrales(false);
-  };
-
-  const cambiarUmbral = (id, valor) => {
-    setUmbralesTemporales((anterior) => ({
-      ...anterior,
-      [id]: valor,
-    }));
-  };
-
   const guardarUmbrales = () => {
-    setInsumos((anterior) =>
-      anterior.map((insumo) => {
-        const valor = parseFloat(
+    setInsumos((anteriores) =>
+      anteriores.map((insumo) => {
+        const valor = Number(
           umbralesTemporales[insumo.id]
         );
 
-        if (
-          !Number.isNaN(valor) &&
-          valor >= 0
-        ) {
+        if (!Number.isNaN(valor) && valor >= 0) {
           return {
             ...insumo,
             m: valor,
@@ -311,203 +364,26 @@ function PanelEmpleado() {
     );
   };
 
-  const rankingInsumos = useMemo(() => {
-    const conteo = {};
-
-    productos.forEach((producto) => {
-      producto.insumos.forEach((idInsumo) => {
-        conteo[idInsumo] =
-          (conteo[idInsumo] || 0) + 1;
-      });
+  const resolverAlerta = (id) => {
+    setAlertasResueltas((anteriores) => {
+      const nuevo = new Set(anteriores);
+      nuevo.add(id);
+      return nuevo;
     });
 
-    return Object.entries(conteo)
-      .map(([idInsumo, cantidad]) => ({
-        insumo: insumos.find(
-          (item) =>
-            item.id ===
-            parseInt(idInsumo, 10)
-        ),
-        cantidad,
-      }))
-      .filter((item) => item.insumo)
-      .sort(
-        (a, b) =>
-          b.cantidad - a.cantidad
-      )
-      .slice(0, 8);
-  }, [productos, insumos]);
-
-  const maxRanking = Math.max(
-    ...rankingInsumos.map(
-      (item) => item.cantidad
-    ),
-    1
-  );
-
-  const stockCritico = useMemo(() => {
-    return [...insumos]
-      .sort(
-        (a, b) =>
-          a.s / a.m - b.s / b.m
-      )
-      .slice(0, 8);
-  }, [insumos]);
-
-  const eventosMes = useMemo(() => {
-    const prefijo = `${calYear}-${String(
-      calMonth + 1
-    ).padStart(2, '0')}`;
-
-    return eventos
-      .filter((evento) =>
-        evento.fecha.startsWith(prefijo)
-      )
-      .sort((a, b) =>
-        a.fecha.localeCompare(b.fecha)
-      );
-  }, [eventos, calYear, calMonth]);
-
-  const diasDelMes = useMemo(() => {
-    const primerDia = new Date(
-      calYear,
-      calMonth,
-      1
-    ).getDay();
-
-    const cantidadDias = new Date(
-      calYear,
-      calMonth + 1,
-      0
-    ).getDate();
-
-    const dias = [];
-
-    for (
-      let i = 0;
-      i < primerDia;
-      i++
-    ) {
-      dias.push({
-        vacio: true,
-        numero: null,
-      });
-    }
-
-    for (
-      let dia = 1;
-      dia <= cantidadDias;
-      dia++
-    ) {
-      dias.push({
-        vacio: false,
-        numero: dia,
-      });
-    }
-
-    return dias;
-  }, [calYear, calMonth]);
-
-  const cambiarMesAnterior = () => {
-    if (calMonth === 0) {
-      setCalMonth(11);
-      setCalYear(
-        (anterior) => anterior - 1
-      );
-    } else {
-      setCalMonth(
-        (anterior) => anterior - 1
-      );
-    }
-
-    setEventosDiaSeleccionado(null);
+    mostrarToast('Alerta marcada como resuelta.');
   };
 
-  const cambiarMesSiguiente = () => {
-    if (calMonth === 11) {
-      setCalMonth(0);
-      setCalYear(
-        (anterior) => anterior + 1
-      );
-    } else {
-      setCalMonth(
-        (anterior) => anterior + 1
-      );
-    }
-
-    setEventosDiaSeleccionado(null);
-  };
-
-  const tieneEvento = (dia) => {
-    const fecha = `${calYear}-${String(
-      calMonth + 1
-    ).padStart(2, '0')}-${String(dia).padStart(
-      2,
-      '0'
-    )}`;
-
-    return eventos.some(
-      (evento) =>
-        evento.fecha === fecha
-    );
-  };
-
-  const seleccionarDia = (dia) => {
-    const fecha = `${calYear}-${String(
-      calMonth + 1
-    ).padStart(2, '0')}-${String(dia).padStart(
-      2,
-      '0'
-    )}`;
-
-    const encontrados = eventos.filter(
-      (evento) =>
-        evento.fecha === fecha
-    );
-
-    if (!encontrados.length) {
-      return;
-    }
-
-    setEventosDiaSeleccionado(dia);
-  };
-
-  const eventosParaMostrar =
-    eventosDiaSeleccionado
-      ? eventosMes.filter(
-          (evento) =>
-            parseInt(
-              evento.fecha.split('-')[2],
-              10
-            ) === eventosDiaSeleccionado
-        )
-      : eventosMes;
-
-  const abrirModalEvento = () => {
-    setEventoFecha(
-      obtenerFechaISO()
-    );
-
+  const abrirEvento = () => {
+    setEventoFecha(fechaISO());
     setEventoDesc('');
     setModalEvento(true);
   };
 
-  const cerrarModalEvento = () => {
-    setModalEvento(false);
-  };
-
-  const cancelarEvento = () => {
-    setModalEvento(false);
-  };
-
   const guardarEvento = () => {
-    const fecha = eventoFecha;
-    const descripcion =
-      eventoDesc.trim();
-
     if (
-      !fecha ||
-      !descripcion
+      !eventoFecha ||
+      !eventoDesc.trim()
     ) {
       mostrarToast(
         'Completa la fecha y la descripción.'
@@ -515,21 +391,21 @@ function PanelEmpleado() {
       return;
     }
 
-    setEventos((anterior) => [
-      ...anterior,
+    setEventos((anteriores) => [
+      ...anteriores,
       {
-        fecha,
-        desc: descripcion,
+        fecha: eventoFecha,
+        desc: eventoDesc.trim(),
       },
     ]);
 
-    const [año, mes] = fecha
+    const [año, mes] = eventoFecha
       .split('-')
       .map(Number);
 
     setCalYear(año);
     setCalMonth(mes - 1);
-    setEventosDiaSeleccionado(null);
+    setDiaSeleccionado(null);
 
     setModalEvento(false);
 
@@ -548,470 +424,401 @@ function PanelEmpleado() {
     <div className="panel-empleado-app">
 
       {/* NAVBAR */}
-      <header className="navbar">
+      <header className="panel-navbar">
 
-        <button
-          type="button"
-          id="menuBtn"
-          className="menu-btn"
-          onClick={() =>
-            setMenuAbierto(
-              (anterior) => !anterior
-            )
-          }
-          aria-label="Abrir menú"
-        >
-          <i className="fa-solid fa-bars"></i>
-          MENÚ
-        </button>
+        <div className="navbar-left">
 
-        <div className="admin-user">
-          <span>
-            Bienvenido Empleado
-          </span>
+          {/* =================================================
+              BOTÓN MENÚ — CAMBIA ☰ / ✕
+          ================================================= */}
+          <button
+            type="button"
+            className={`menu-btn ${
+              menuAbierto ? 'active' : ''
+            }`}
+            onClick={() =>
+              setMenuAbierto((estado) => !estado)
+            }
+            aria-label={
+              menuAbierto
+                ? 'Cerrar menú'
+                : 'Abrir menú'
+            }
+          >
+            {menuAbierto ? (
+              <i className="fas fa-xmark"></i>
+            ) : (
+              <>
+                <span></span>
+                <span></span>
+                <span></span>
+              </>
+            )}
+          </button>
 
-          <i className="fa-regular fa-circle-user"></i>
+          {/* LOGO REAL */}
+          <div className="brand">
+            <img
+              src={logo}
+              alt="LuckyPay"
+            />
+            <span>LuckyPay</span>
+          </div>
+
+        </div>
+
+        <div className="welcome">
+
+          <div className="welcome-text">
+            <strong>
+              Bienvenido, Empleado
+            </strong>
+
+            <span>
+              Panel operativo
+            </span>
+          </div>
+
+          <button
+            type="button"
+            className="logout-btn"
+            onClick={cerrarSesion}
+          >
+            Salir
+          </button>
+
         </div>
 
       </header>
 
-      {/* SIDEBAR */}
-      <aside
-        className={`sidebar ${
-          menuAbierto ? 'active' : ''
-        }`}
-      >
-        <ul>
+      {/* OVERLAY */}
+      {menuAbierto && (
+        <div
+          className="menu-overlay"
+          onClick={() =>
+            setMenuAbierto(false)
+          }
+        ></div>
+      )}
 
-          <li>
+      {/* SIDEBAR */}
+      {menuAbierto && (
+        <aside className="panel-sidebar">
+
+          <div className="sidebar-header">
+            <span className="sidebar-title">
+              Menú
+            </span>
+          </div>
+
+          <nav className="sidebar-nav">
+
             <button
               type="button"
-              className="sidebar-link activo"
+              className="sidebar-item active"
               onClick={() =>
                 setMenuAbierto(false)
               }
             >
-              <i className="fas fa-home"></i>
+              <span className="sidebar-icon">
+                <i className="fas fa-home"></i>
+              </span>
+
               <span>Inicio</span>
             </button>
-          </li>
 
-          <li>
             <button
               type="button"
-              className="sidebar-link"
+              className="sidebar-item"
               onClick={() =>
-                navegar(
-                  '/empleado/insumos'
-                )
+                navegar('/empleado/insumos')
               }
             >
-              <i className="fas fa-box"></i>
+              <span className="sidebar-icon">
+                <i className="fas fa-box"></i>
+              </span>
+
               <span>Insumos</span>
             </button>
-          </li>
 
-          <li>
             <button
               type="button"
-              className="sidebar-link"
+              className="sidebar-item"
               onClick={() =>
-                navegar(
-                  '/empleado/productos'
-                )
+                navegar('/empleado/productos')
               }
             >
-              <i className="fas fa-cube"></i>
+              <span className="sidebar-icon">
+                <i className="fas fa-cube"></i>
+              </span>
+
               <span>Productos</span>
             </button>
-          </li>
 
-          <li>
             <button
               type="button"
-              className="sidebar-link"
+              className="sidebar-item"
               onClick={() =>
-                navegar(
-                  '/empleado/costos'
-                )
+                navegar('/empleado/costos')
               }
             >
-              <i className="fas fa-dollar-sign"></i>
+              <span className="sidebar-icon">
+                <i className="fas fa-dollar-sign"></i>
+              </span>
+
               <span>Costos</span>
             </button>
-          </li>
 
-          <li>
             <button
               type="button"
-              className="sidebar-link"
+              className="sidebar-item"
               onClick={() =>
-                navegar(
-                  '/empleado/reportes'
-                )
+                navegar('/empleado/reportes')
               }
             >
-              <i className="fas fa-file-alt"></i>
+              <span className="sidebar-icon">
+                <i className="fas fa-file-alt"></i>
+              </span>
+
               <span>Reportes</span>
             </button>
-          </li>
 
-          <li>
+          </nav>
+
+          <div className="sidebar-separator"></div>
+
+          <div className="sidebar-bottom">
+
             <button
               type="button"
-              className="sidebar-link"
+              className="sidebar-logout"
               onClick={cerrarSesion}
             >
               <i className="fas fa-sign-out-alt"></i>
               <span>Cerrar sesión</span>
             </button>
-          </li>
 
-        </ul>
-      </aside>
+          </div>
 
-      {/* CONTENIDO PRINCIPAL */}
-      <main>
+        </aside>
+      )}
 
-        {/* BIENVENIDA */}
-        <div className="bienvenida">
+      {/* CONTENIDO */}
+      <main className="panel-main">
 
-          <div className="bienvenida-texto">
+        {/* ENCABEZADO */}
+        <section className="panel-heading">
+
+          <div>
+            <span className="eyebrow">
+              PANEL DEL EMPLEADO
+            </span>
 
             <h1>
-              ¡Bienvenido! 👋
+              Resumen operativo
             </h1>
 
             <p>
-              Aquí tienes el resumen operativo de
-              insumos y productos.
+              Control de insumos, productos y stock.
             </p>
-
-            <div className="badge-live">
-              <span className="dot"></span>
-              Panel activo
-            </div>
-
           </div>
 
-          <div className="bienvenida-fecha">
-
-            <strong>
-              {fechaHoy.dia}
-            </strong>
-
-            <br />
-
-            {fechaHoy.numero} de{' '}
-            {fechaHoy.mes} de{' '}
-            {fechaHoy.año}
-
-            <br />
-
-            {fechaHoy.hora}
-
-          </div>
-
-        </div>
-
-        {/* KPI */}
-        <div className="tarjetas-kpi">
-
-          {/* INSUMOS */}
-          <div className="tarjeta-kpi kpi-azul">
-
-            <div className="kpi-cabeza">
-
-              <div>
-
-                <div className="kpi-label">
-                  Insumos registrados
-                </div>
-
-                <div className="kpi-valor">
-                  {insumos.length}
-                </div>
-
-              </div>
-
-              <div className="kpi-icono">
-                <i className="fas fa-flask"></i>
-              </div>
-
-            </div>
-
-            <div className="kpi-sub neutro">
-              <i className="fas fa-box"></i>
-              En el catálogo de insumos
-            </div>
-
-          </div>
-
-          {/* PRODUCTOS */}
-          <div className="tarjeta-kpi kpi-verde">
-
-            <div className="kpi-cabeza">
-
-              <div>
-
-                <div className="kpi-label">
-                  Productos registrados
-                </div>
-
-                <div className="kpi-valor">
-                  {productos.length}
-                </div>
-
-              </div>
-
-              <div className="kpi-icono">
-                <i className="fas fa-cube"></i>
-              </div>
-
-            </div>
-
-            <div className="kpi-sub positivo">
-              <i className="fas fa-circle-check"></i>
-              En el catálogo de productos
-            </div>
-
-          </div>
-
-          {/* STOCK OK */}
-          <div className="tarjeta-kpi kpi-morado">
-
-            <div className="kpi-cabeza">
-
-              <div>
-
-                <div className="kpi-label">
-                  Insumos con stock OK
-                </div>
-
-                <div className="kpi-valor">
-                  {insumosSaludables}/
-                  {insumos.length}
-                </div>
-
-              </div>
-
-              <div className="kpi-icono">
-                <i className="fas fa-warehouse"></i>
-              </div>
-
-            </div>
-
-            <div className="kpi-sub neutro">
-              <i className="fas fa-circle-info"></i>
-              Por encima del umbral mínimo
-            </div>
-
-          </div>
-
-          {/* ALERTAS */}
-          <div
-            className="tarjeta-kpi kpi-rojo"
-            id="kpiAlertaBtn"
-            title="Ver alertas de stock"
-            onClick={abrirModalAlertas}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(evento) => {
-              if (
-                evento.key === 'Enter' ||
-                evento.key === ' '
-              ) {
-                abrirModalAlertas();
-              }
-            }}
-          >
-
-            <div className="kpi-cabeza">
-
-              <div>
-
-                <div className="kpi-label">
-                  Alertas de stock
-                </div>
-
-                <div className="kpi-valor">
-                  {cantidadAlertas}
-                </div>
-
-              </div>
-
-              <div className="kpi-icono">
-
-                <i
-                  className={`fas fa-bell${
-                    cantidadAlertas
-                      ? ''
-                      : '-slash'
-                  }`}
-                ></i>
-
-              </div>
-
-            </div>
-
-            <div className="kpi-sub negativo">
-              <i className="fas fa-triangle-exclamation"></i>
-              Insumos bajo el umbral
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* ACCESOS RÁPIDOS */}
-        <div className="seccion-titulo">
-
-          <i
-            className="fas fa-bolt"
-            style={{
-              color: '#d97706',
-            }}
-          ></i>
-
-          Accesos rápidos
-
-        </div>
-
-        <div className="accesos-grid">
-
-          <button
-            type="button"
-            className="acceso"
-            onClick={() =>
-              navegar(
-                '/empleado/insumos'
-              )
-            }
-          >
-            <div className="acceso-icono ac-verde">
-              <i className="fas fa-plus"></i>
-            </div>
+          <div className="fecha-panel">
 
             <span>
-              Nuevo insumo
+              FECHA ACTUAL
             </span>
-          </button>
 
-          <button
-            type="button"
-            className="acceso"
-            onClick={() =>
-              navegar(
-                '/empleado/productos'
-              )
-            }
-          >
-            <div className="acceso-icono ac-azul">
+            <strong>
+              {fechaHoy.dia},{' '}
+              {fechaHoy.numero} de{' '}
+              {fechaHoy.mes} de{' '}
+              {fechaHoy.año}
+            </strong>
+
+            <strong>
+              {fechaHoy.hora}
+            </strong>
+
+          </div>
+
+        </section>
+
+        {/* ESTADÍSTICAS */}
+        <section className="stats-grid">
+
+          <div className="stat-card">
+
+            <div className="stat-icon">
+              <i className="fas fa-flask"></i>
+            </div>
+
+            <div className="stat-content">
+              <span>INSUMOS</span>
+
+              <strong>
+                {insumos.length}
+              </strong>
+
+              <small>
+                Registrados
+              </small>
+            </div>
+
+          </div>
+
+          <div className="stat-card">
+
+            <div className="stat-icon">
               <i className="fas fa-cube"></i>
             </div>
 
-            <span>
-              Nuevo producto
-            </span>
-          </button>
+            <div className="stat-content">
+              <span>PRODUCTOS</span>
 
-          <button
-            type="button"
-            className="acceso"
-            onClick={() =>
-              navegar(
-                '/empleado/costos'
-              )
-            }
-          >
-            <div className="acceso-icono ac-amarillo">
-              <i className="fas fa-dollar-sign"></i>
+              <strong>
+                {productos.length}
+              </strong>
+
+              <small>
+                Registrados
+              </small>
             </div>
 
-            <span>
-              Ver costos
-            </span>
-          </button>
-
-          <button
-            type="button"
-            className="acceso"
-            onClick={() =>
-              navegar(
-                '/empleado/reportes'
-              )
-            }
-          >
-            <div className="acceso-icono ac-morado">
-              <i className="fas fa-file-alt"></i>
-            </div>
-
-            <span>
-              Ver reportes
-            </span>
-          </button>
-
-        </div>
-
-        {/* CALENDARIO */}
-        <div
-          className="panel"
-          style={{
-            marginBottom: '16px',
-          }}
-        >
+          </div>
 
           <div
-            className="panel-cabeza"
-            style={{
-              background:
-                'linear-gradient(90deg,#0c5048,#1b6d4a)',
-              borderRadius:
-                '17px 17px 0 0',
-            }}
+            className="stat-card clickable"
+            onClick={() =>
+              setModalAlertas(true)
+            }
           >
 
-            <div>
+            <div className="stat-icon warning">
+              <i className="fas fa-bell"></i>
+            </div>
 
-              <div
-                className="panel-titulo"
-                style={{
-                  color: 'white',
-                }}
-              >
+            <div className="stat-content">
+              <span>ALERTAS</span>
+
+              <strong>
+                {alertasStock.length}
+              </strong>
+
+              <small>
+                Requieren atención
+              </small>
+            </div>
+
+          </div>
+
+          <div className="stat-card">
+
+            <div className="stat-icon">
+              <i className="fas fa-warehouse"></i>
+            </div>
+
+            <div className="stat-content">
+              <span>STOCK OK</span>
+
+              <strong>
+                {insumosSaludables}/
+                {insumos.length}
+              </strong>
+
+              <small>
+                Sobre el mínimo
+              </small>
+            </div>
+
+          </div>
+
+        </section>
+
+        {/* ACCIONES RÁPIDAS */}
+        <section className="empleado-section">
+
+          <div className="empleado-section-title">
+            <i className="fas fa-bolt"></i>
+            Acciones rápidas
+          </div>
+
+          <div className="empleado-quick-grid">
+
+            <button
+              type="button"
+              className="empleado-quick-card"
+              onClick={() =>
+                navegar('/empleado/insumos')
+              }
+            >
+              <i className="fas fa-plus"></i>
+              <strong>Nuevo insumo</strong>
+              <span>Registrar insumo</span>
+            </button>
+
+            <button
+              type="button"
+              className="empleado-quick-card"
+              onClick={() =>
+                navegar('/empleado/productos')
+              }
+            >
+              <i className="fas fa-cube"></i>
+              <strong>Productos</strong>
+              <span>Gestionar productos</span>
+            </button>
+
+            <button
+              type="button"
+              className="empleado-quick-card"
+              onClick={() =>
+                navegar('/empleado/costos')
+              }
+            >
+              <i className="fas fa-dollar-sign"></i>
+              <strong>Costos</strong>
+              <span>Consultar costos</span>
+            </button>
+
+            <button
+              type="button"
+              className="empleado-quick-card"
+              onClick={() =>
+                navegar('/empleado/reportes')
+              }
+            >
+              <i className="fas fa-file-alt"></i>
+              <strong>Reportes</strong>
+              <span>Consultar reportes</span>
+            </button>
+
+          </div>
+
+        </section>
+
+        {/* CALENDARIO */}
+        <section className="empleado-panel">
+
+          <div className="empleado-panel-header">
+
+            <div>
+              <span>PLANIFICACIÓN</span>
+
+              <h2>
                 <i className="fas fa-calendar-days"></i>
                 Calendario de stock
-              </div>
+              </h2>
 
-              <div
-                className="panel-sub"
-                style={{
-                  color:
-                    'rgba(255,255,255,.65)',
-                }}
-              >
+              <p>
                 Recordatorios de reposición
-                de insumos
-              </div>
-
+              </p>
             </div>
 
             <button
               type="button"
-              className="btn-sec"
-              onClick={abrirModalEvento}
-              style={{
-                fontSize: '12px',
-                padding: '7px 14px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                background:
-                  'rgba(255,255,255,.18)',
-                color: 'white',
-                border:
-                  '1px solid rgba(255,255,255,.25)',
-              }}
+              className="empleado-gold-btn"
+              onClick={abrirEvento}
             >
               <i className="fas fa-plus"></i>
               Agregar recordatorio
@@ -1019,46 +826,31 @@ function PanelEmpleado() {
 
           </div>
 
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns:
-                '320px 1fr',
-              gap: 0,
-            }}
-          >
+          <div className="empleado-calendar-layout">
 
-            {/* CALENDARIO IZQUIERDA */}
-            <div
-              className="panel-body"
-              style={{
-                borderRight:
-                  '1px solid #eef1ec',
-              }}
-            >
+            <div className="empleado-calendar">
 
               <div className="cal-nav">
 
                 <button
                   type="button"
                   className="cal-btn"
-                  onClick={
-                    cambiarMesAnterior
+                  onClick={() =>
+                    cambiarMes('anterior')
                   }
                 >
                   <i className="fas fa-chevron-left"></i>
                 </button>
 
-                <span className="cal-mes">
-                  {mesesNombre[calMonth]}{' '}
-                  {calYear}
-                </span>
+                <strong>
+                  {meses[calMonth]} {calYear}
+                </strong>
 
                 <button
                   type="button"
                   className="cal-btn"
-                  onClick={
-                    cambiarMesSiguiente
+                  onClick={() =>
+                    cambiarMes('siguiente')
                   }
                 >
                   <i className="fas fa-chevron-right"></i>
@@ -1070,8 +862,8 @@ function PanelEmpleado() {
 
                 {diasSemana.map((dia) => (
                   <div
-                    className="cal-dia-label"
                     key={dia}
+                    className="cal-dia-label"
                   >
                     {dia}
                   </div>
@@ -1083,8 +875,8 @@ function PanelEmpleado() {
                     if (dia.vacio) {
                       return (
                         <div
-                          className="cal-dia vacio"
                           key={`vacio-${indice}`}
+                          className="cal-dia vacio"
                         ></div>
                       );
                     }
@@ -1095,20 +887,17 @@ function PanelEmpleado() {
                         hoy.getDate();
 
                     const evento =
-                      tieneEvento(
-                        dia.numero
-                      );
+                      tieneEvento(dia.numero);
 
                     return (
-                      <div
+                      <button
+                        type="button"
                         key={dia.numero}
-                        className={`cal-dia${
-                          esHoy
-                            ? ' hoy'
-                            : ''
-                        }${
+                        className={`cal-dia ${
+                          esHoy ? 'hoy' : ''
+                        } ${
                           evento
-                            ? ' tiene-evento'
+                            ? 'tiene-evento'
                             : ''
                         }`}
                         onClick={() =>
@@ -1118,7 +907,11 @@ function PanelEmpleado() {
                         }
                       >
                         {dia.numero}
-                      </div>
+
+                        {evento && (
+                          <span></span>
+                        )}
+                      </button>
                     );
                   }
                 )}
@@ -1127,214 +920,149 @@ function PanelEmpleado() {
 
             </div>
 
-            {/* RECORDATORIOS DERECHA */}
-            <div
-              className="panel-body"
-              style={{
-                minHeight: '220px',
-              }}
-            >
+            <div className="empleado-eventos">
 
-              <div
-                style={{
-                  fontSize: '11px',
-                  fontWeight: 800,
-                  color: '#8a9690',
-                  textTransform:
-                    'uppercase',
-                  letterSpacing: '.5px',
-                  marginBottom: '12px',
-                }}
-              >
-                {eventosDiaSeleccionado
-                  ? `Recordatorios del día ${eventosDiaSeleccionado}`
+              <div className="empleado-eventos-title">
+                {diaSeleccionado
+                  ? `Recordatorios del día ${diaSeleccionado}`
                   : 'Recordatorios del mes'}
               </div>
 
-              <div
-                className="cal-eventos"
-                style={{
-                  maxHeight: '220px',
-                  overflowY: 'auto',
-                }}
-              >
+              {eventosParaMostrar.length === 0 ? (
+                <div className="sin-eventos">
+                  No hay recordatorios.
+                </div>
+              ) : (
+                eventosParaMostrar.map(
+                  (evento, indice) => {
 
-                {eventosParaMostrar.length ===
-                0 ? (
-
-                  <div
-                    style={{
-                      fontSize: '12px',
-                      color: '#8a9690',
-                      textAlign: 'center',
-                      padding: '10px',
-                    }}
-                  >
-                    Sin recordatorios este mes
-                  </div>
-
-                ) : (
-
-                  eventosParaMostrar.map(
-                    (evento, indice) => {
-
-                      const dia =
-                        parseInt(
-                          evento.fecha.split(
-                            '-'
-                          )[2],
-                          10
-                        );
-
-                      return (
-                        <div
-                          className="cal-evento"
-                          key={`${evento.fecha}-${indice}`}
-                        >
-
-                          <span className="ev-icono">
-                            <i className="fas fa-box"></i>
-                          </span>
-
-                          <span className="ev-texto">
-                            {evento.desc}
-                          </span>
-
-                          <span className="ev-fecha">
-                            Día {dia}
-                          </span>
-
-                        </div>
+                    const dia =
+                      Number(
+                        evento.fecha.split('-')[2]
                       );
-                    }
-                  )
-
-                )}
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* FILA INFERIOR */}
-        <div className="grid-2">
-
-          {/* INSUMOS MÁS USADOS */}
-          <div className="panel">
-
-            <div className="panel-cabeza">
-
-              <div>
-
-                <div className="panel-titulo">
-
-                  <i className="fas fa-ranking-star"></i>
-
-                  Insumos más usados
-
-                </div>
-
-                <div className="panel-sub">
-                  Según cantidad de productos
-                  que los usan
-                </div>
-
-              </div>
-
-            </div>
-
-            <div className="panel-body">
-
-              <div className="ranking-lista">
-
-                {rankingInsumos.map(
-                  (item, indice) => {
-
-                    const porcentaje =
-                      (
-                        (item.cantidad /
-                          maxRanking) *
-                        100
-                      ).toFixed(1);
 
                     return (
                       <div
-                        className="ranking-fila"
-                        key={item.insumo.id}
+                        className="empleado-evento"
+                        key={`${evento.fecha}-${indice}`}
                       >
-
-                        <div
-                          className={`ranking-pos ${
-                            indice === 0
-                              ? 'top1'
-                              : ''
-                          }`}
-                        >
-                          {indice + 1}
+                        <div className="evento-icon">
+                          <i className="fas fa-box"></i>
                         </div>
 
-                        <span
-                          className="ranking-nombre"
-                          title={
-                            item.insumo.nombre
-                          }
-                        >
-                          {item.insumo.nombre}
-                        </span>
+                        <div>
+                          <strong>
+                            {evento.desc}
+                          </strong>
 
-                        <div className="ranking-track">
-
-                          <div
-                            className="ranking-fill"
-                            style={{
-                              width: `${porcentaje}%`,
-                            }}
-                          ></div>
-
+                          <span>
+                            Día {dia}
+                          </span>
                         </div>
-
-                        <span className="ranking-val">
-                          {item.cantidad}{' '}
-                          producto
-                          {item.cantidad === 1
-                            ? ''
-                            : 's'}
-                        </span>
-
                       </div>
                     );
                   }
-                )}
-
-              </div>
+                )
+              )}
 
             </div>
 
           </div>
 
-          {/* STOCK MÁS CRÍTICO */}
-          <div className="panel">
+        </section>
 
-            <div className="panel-cabeza">
+        {/* PARTE INFERIOR */}
+        <section className="empleado-bottom-grid">
 
-              <div>
+          {/* RANKING */}
+          <div className="empleado-panel">
 
-                <div className="panel-titulo">
+            <div className="empleado-panel-simple-header">
 
-                  <i className="fas fa-box-open"></i>
+              <span>
+                INVENTARIO
+              </span>
 
-                  Stock más crítico
+              <h2>
+                <i className="fas fa-ranking-star"></i>
+                Insumos más usados
+              </h2>
 
-                </div>
+              <p>
+                Según cantidad de productos que los usan
+              </p>
 
-                <div className="panel-sub">
-                  Insumos a punto de agotarse
-                </div>
+            </div>
 
-              </div>
+            <div className="ranking-lista">
+
+              {rankingInsumos.map(
+                (item, indice) => {
+
+                  const porcentaje =
+                    (item.cantidad /
+                      maxRanking) *
+                    100;
+
+                  return (
+                    <div
+                      className="ranking-fila"
+                      key={item.insumo.id}
+                    >
+
+                      <div
+                        className={`ranking-pos ${
+                          indice === 0
+                            ? 'top1'
+                            : ''
+                        }`}
+                      >
+                        {indice + 1}
+                      </div>
+
+                      <span className="ranking-nombre">
+                        {item.insumo.nombre}
+                      </span>
+
+                      <div className="ranking-track">
+                        <div
+                          className="ranking-fill"
+                          style={{
+                            width: `${porcentaje}%`,
+                          }}
+                        ></div>
+                      </div>
+
+                      <strong className="ranking-val">
+                        {item.cantidad}
+                      </strong>
+
+                    </div>
+                  );
+                }
+              )}
+
+            </div>
+
+          </div>
+
+          {/* STOCK CRÍTICO */}
+          <div className="empleado-panel">
+
+            <div className="empleado-panel-simple-header">
+
+              <span>
+                INVENTARIO
+              </span>
+
+              <h2>
+                <i className="fas fa-box-open"></i>
+                Stock más crítico
+              </h2>
+
+              <p>
+                Insumos a punto de agotarse
+              </p>
 
             </div>
 
@@ -1366,20 +1094,10 @@ function PanelEmpleado() {
                         insumo.s <
                         insumo.m;
 
-                      const colorFill =
-                        critico
-                          ? porcentaje < 50
-                            ? '#b91c1c'
-                            : '#d97706'
-                          : '#1b6d4a';
-
                       return (
-                        <tr
-                          key={insumo.id}
-                        >
+                        <tr key={insumo.id}>
 
                           <td>
-
                             <div className="prod-cell">
 
                               <div className="prod-ic">
@@ -1389,7 +1107,6 @@ function PanelEmpleado() {
                               {insumo.nombre}
 
                             </div>
-
                           </td>
 
                           <td>
@@ -1397,13 +1114,13 @@ function PanelEmpleado() {
                             <div className="mini-stock-bar">
 
                               <div
-                                className="mini-stock-fill"
+                                className={`mini-stock-fill ${
+                                  critico
+                                    ? 'critico'
+                                    : 'normal'
+                                }`}
                                 style={{
-                                  width: `${porcentaje.toFixed(
-                                    0
-                                  )}%`,
-                                  background:
-                                    colorFill,
+                                  width: `${porcentaje}%`,
                                 }}
                               ></div>
 
@@ -1412,21 +1129,19 @@ function PanelEmpleado() {
                             <strong>
                               {insumo.s}{' '}
                               {insumo.u}
-                            </strong>{' '}
+                            </strong>
 
-                            {critico ? (
-
-                              <span className="badge-na">
-                                bajo
-                              </span>
-
-                            ) : (
-
-                              <span className="badge-eq">
-                                ok
-                              </span>
-
-                            )}
+                            <span
+                              className={
+                                critico
+                                  ? 'badge-na'
+                                  : 'badge-eq'
+                              }
+                            >
+                              {critico
+                                ? 'bajo'
+                                : 'ok'}
+                            </span>
 
                           </td>
 
@@ -1443,88 +1158,45 @@ function PanelEmpleado() {
 
           </div>
 
-        </div>
+        </section>
 
         {/* FOOTER */}
-        <footer
-          style={{
-            textAlign: 'center',
-            padding: '22px 16px',
-            marginTop: '36px',
-            borderTop:
-              '1px solid #c9a227',
-            color: '#8a6d1a',
-            fontSize: '13px',
-            fontWeight: 600,
-          }}
-        >
-          &copy; 2026{' '}
-
-          <strong
-            style={{
-              color: '#c9a227',
-            }}
-          >
-            LuckyPay
-          </strong>{' '}
-
-          &mdash; Controla tu Negocio,
+        <footer className="empleado-footer">
+          © 2026{' '}
+          <strong>LuckyPay</strong>{' '}
+          — Controla tu Negocio,
           Crece con Confianza
         </footer>
 
       </main>
 
-      {/* MODAL ALERTAS DE STOCK */}
+      {/* MODAL ALERTAS */}
       {modalAlertas && (
         <div
           className="modal-overlay activo"
-          onClick={(evento) => {
+          onClick={(e) => {
             if (
-              evento.target ===
-              evento.currentTarget
+              e.target === e.currentTarget
             ) {
-              cerrarModalAlertas();
+              setModalAlertas(false);
             }
           }}
         >
 
-          <div
-            className="modal-box"
-            style={{
-              maxWidth: '520px',
-            }}
-          >
+          <div className="modal-box">
 
             <div className="modal-head">
 
               <h2>
-
-                <i
-                  className="fas fa-bell"
-                  style={{
-                    color: '#b91c1c',
-                  }}
-                ></i>
-
+                <i className="fas fa-bell"></i>
                 Alertas de stock
-
-                <span
-                  className={`badge-alerta-cnt ${
-                    cantidadAlertas === 0
-                      ? 'cero'
-                      : ''
-                  }`}
-                >
-                  {cantidadAlertas}
-                </span>
-
               </h2>
 
               <button
                 type="button"
                 className="modal-cerrar"
-                onClick={
-                  cerrarModalAlertas
+                onClick={() =>
+                  setModalAlertas(false)
                 }
               >
                 <i className="fas fa-xmark"></i>
@@ -1532,223 +1204,110 @@ function PanelEmpleado() {
 
             </div>
 
-            <div
-              className="modal-body"
-              style={{
-                padding: 0,
-              }}
-            >
+            <div className="modal-body">
 
-              <div
-                style={{
-                  padding: '14px 20px',
-                  background: '#fff8f8',
-                  borderBottom:
-                    '1px solid #fce7e7',
-                  fontSize: '12px',
-                  color: '#8a9690',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent:
-                    'space-between',
-                  gap: '12px',
-                }}
-              >
+              <div className="modal-info">
 
                 <span>
-
-                  <i
-                    className="fas fa-circle-info"
-                    style={{
-                      color: '#d97706',
-                      marginRight: '4px',
-                    }}
-                  ></i>
-
-                  Insumos bajo el
-                  umbral mínimo
-
+                  Insumos por debajo del
+                  mínimo establecido.
                 </span>
 
                 <button
                   type="button"
                   className="btn-sec"
-                  onClick={
-                    abrirModalUmbrales
-                  }
-                  style={{
-                    fontSize: '12px',
-                    padding: '6px 12px',
-                    display: 'flex',
-                    alignItems:
-                      'center',
-                    gap: '5px',
-                  }}
+                  onClick={abrirUmbrales}
                 >
-
                   <i className="fas fa-sliders"></i>
-
                   Umbrales
-
                 </button>
 
               </div>
 
-              <div>
+              {alertasStock.length === 0 ? (
 
-                {!alertasActivas.length ? (
-
-                  <div className="sin-alertas">
-
-                    <i
-                      className="fas fa-circle-check"
-                      style={{
-                        fontSize: '28px',
-                        color: '#1b6d2a',
-                      }}
-                    ></i>
-
+                <div className="sin-alertas">
+                  <i className="fas fa-circle-check"></i>
+                  <span>
                     Sin alertas activas
+                  </span>
+                </div>
 
-                  </div>
+              ) : (
 
-                ) : (
+                <div className="alertas-lista">
 
-                  <div
-                    className="alertas-lista"
-                    style={{
-                      padding:
-                        '0 20px',
-                    }}
-                  >
+                  {alertasStock.map(
+                    (insumo) => {
 
-                    {alertasOrdenadas.map(
-                      (insumo) => {
+                      const porcentaje =
+                        Math.min(
+                          (insumo.s /
+                            insumo.m) *
+                            100,
+                          100
+                        );
 
-                        const resuelta =
-                          alertasResueltas.has(
-                            insumo.id
-                          );
+                      return (
+                        <div
+                          className="alerta-item"
+                          key={insumo.id}
+                        >
 
-                        const porcentaje =
-                          Math.min(
-                            (insumo.s /
-                              insumo.m) *
-                              100,
-                            100
-                          );
+                          <div className="al-ic">
+                            <i className="fas fa-triangle-exclamation"></i>
+                          </div>
 
-                        const critica =
-                          porcentaje < 50;
+                          <div className="al-info">
 
-                        return (
-                          <div
-                            className={`alerta-item ${
-                              critica
-                                ? 'al-critica'
-                                : 'al-advertencia'
-                            } ${
-                              resuelta
-                                ? 'resuelta'
-                                : ''
-                            }`}
-                            key={insumo.id}
-                          >
+                            <strong>
+                              {insumo.nombre}
+                            </strong>
 
-                            <div className="al-ic">
-
-                              <i
-                                className={`fas fa-${
-                                  critica
-                                    ? 'triangle-exclamation'
-                                    : 'circle-exclamation'
-                                }`}
-                              ></i>
-
-                            </div>
-
-                            <div className="al-info">
-
-                              <div className="al-nombre">
-                                {insumo.nombre}
-                              </div>
-
-                              <div className="al-det">
-                                {resuelta
-                                  ? 'Resuelta · '
-                                  : ''}
-                                Mín:{' '}
-                                {insumo.m}{' '}
-                                {insumo.u}
-                              </div>
-
-                            </div>
-
-                            <div className="al-stock">
-
-                              <div className="al-actual">
-                                {insumo.s}{' '}
-                                {insumo.u}
-                              </div>
-
-                              <div className="stock-bar">
-
-                                <div
-                                  className={`stock-fill ${
-                                    critica
-                                      ? 'sf-critica'
-                                      : 'sf-advertencia'
-                                  }`}
-                                  style={{
-                                    width: `${porcentaje.toFixed(
-                                      0
-                                    )}%`,
-                                  }}
-                                ></div>
-
-                              </div>
-
-                              <div className="al-min">
-                                de {insumo.m}
-                              </div>
-
-                            </div>
-
-                            {!resuelta ? (
-
-                              <button
-                                type="button"
-                                className="btn-res"
-                                onClick={() =>
-                                  resolverAlerta(
-                                    insumo.id
-                                  )
-                                }
-                                title="Marcar resuelta"
-                              >
-                                <i className="fas fa-check"></i>
-                              </button>
-
-                            ) : (
-
-                              <div
-                                style={{
-                                  width: '30px',
-                                }}
-                              ></div>
-
-                            )}
+                            <span>
+                              Mínimo: {insumo.m}{' '}
+                              {insumo.u}
+                            </span>
 
                           </div>
-                        );
-                      }
-                    )}
 
-                  </div>
+                          <div className="al-stock">
 
-                )}
+                            <strong>
+                              {insumo.s}{' '}
+                              {insumo.u}
+                            </strong>
 
-              </div>
+                            <div className="stock-bar">
+                              <div
+                                className="stock-fill"
+                                style={{
+                                  width: `${porcentaje}%`,
+                                }}
+                              ></div>
+                            </div>
+
+                          </div>
+
+                          <button
+                            type="button"
+                            className="btn-res"
+                            onClick={() =>
+                              resolverAlerta(
+                                insumo.id
+                              )
+                            }
+                          >
+                            <i className="fas fa-check"></i>
+                          </button>
+
+                        </div>
+                      );
+                    }
+                  )}
+
+                </div>
+              )}
 
             </div>
 
@@ -1761,12 +1320,11 @@ function PanelEmpleado() {
       {modalUmbrales && (
         <div
           className="modal-overlay activo"
-          onClick={(evento) => {
+          onClick={(e) => {
             if (
-              evento.target ===
-              evento.currentTarget
+              e.target === e.currentTarget
             ) {
-              cerrarModalUmbrales();
+              setModalUmbrales(false);
             }
           }}
         >
@@ -1776,18 +1334,15 @@ function PanelEmpleado() {
             <div className="modal-head">
 
               <h2>
-
                 <i className="fas fa-sliders"></i>
-
-                Umbrales mínimos de stock
-
+                Umbrales mínimos
               </h2>
 
               <button
                 type="button"
                 className="modal-cerrar"
-                onClick={
-                  cerrarModalUmbrales
+                onClick={() =>
+                  setModalUmbrales(false)
                 }
               >
                 <i className="fas fa-xmark"></i>
@@ -1797,21 +1352,12 @@ function PanelEmpleado() {
 
             <div className="modal-body">
 
-              <p
-                style={{
-                  fontSize: '13px',
-                  color: '#8a9690',
-                  marginBottom:
-                    '16px',
-                }}
-              >
-                Define el stock mínimo de
-                cada insumo. Cuando el stock
-                real baje, aparecerá una
-                alerta.
+              <p className="modal-description">
+                Define el stock mínimo de cada
+                insumo.
               </p>
 
-              <div>
+              <div className="umbrales-lista">
 
                 {insumos.map((insumo) => (
                   <div
@@ -1819,30 +1365,32 @@ function PanelEmpleado() {
                     key={insumo.id}
                   >
 
-                    <span className="umbral-nombre">
+                    <span>
                       {insumo.nombre}
                     </span>
 
                     <input
                       type="number"
-                      className="input-umbral"
+                      min="0"
                       value={
                         umbralesTemporales[
                           insumo.id
                         ] ?? insumo.m
                       }
-                      min="0"
-                      onChange={(evento) =>
-                        cambiarUmbral(
-                          insumo.id,
-                          evento.target.value
+                      onChange={(e) =>
+                        setUmbralesTemporales(
+                          (anteriores) => ({
+                            ...anteriores,
+                            [insumo.id]:
+                              e.target.value,
+                          })
                         )
                       }
                     />
 
-                    <span className="umbral-und">
+                    <small>
                       {insumo.u}
-                    </span>
+                    </small>
 
                   </div>
                 ))}
@@ -1856,8 +1404,8 @@ function PanelEmpleado() {
               <button
                 type="button"
                 className="btn-sec"
-                onClick={
-                  cancelarUmbrales
+                onClick={() =>
+                  setModalUmbrales(false)
                 }
               >
                 Cancelar
@@ -1866,15 +1414,10 @@ function PanelEmpleado() {
               <button
                 type="button"
                 className="btn-pri"
-                onClick={
-                  guardarUmbrales
-                }
+                onClick={guardarUmbrales}
               >
-
                 <i className="fas fa-save"></i>
-
                 Guardar
-
               </button>
 
             </div>
@@ -1884,37 +1427,33 @@ function PanelEmpleado() {
         </div>
       )}
 
-      {/* MODAL NUEVO RECORDATORIO */}
+      {/* MODAL RECORDATORIO */}
       {modalEvento && (
         <div
           className="modal-overlay activo"
-          onClick={(evento) => {
+          onClick={(e) => {
             if (
-              evento.target ===
-              evento.currentTarget
+              e.target === e.currentTarget
             ) {
-              cerrarModalEvento();
+              setModalEvento(false);
             }
           }}
         >
 
-          <div className="modal-evento-box">
+          <div className="modal-box">
 
             <div className="modal-head">
 
               <h2>
-
                 <i className="fas fa-calendar-plus"></i>
-
-                Agregar recordatorio de stock
-
+                Nuevo recordatorio
               </h2>
 
               <button
                 type="button"
                 className="modal-cerrar"
-                onClick={
-                  cerrarModalEvento
+                onClick={() =>
+                  setModalEvento(false)
                 }
               >
                 <i className="fas fa-xmark"></i>
@@ -1924,66 +1463,36 @@ function PanelEmpleado() {
 
             <div className="modal-body">
 
-              <div
-                style={{
-                  marginBottom: '12px',
-                }}
-              >
+              <label>
+                Fecha
+              </label>
 
-                <label
-                  style={{
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    color: '#5b6a62',
-                    display: 'block',
-                    marginBottom:
-                      '6px',
-                  }}
-                >
-                  Fecha
-                </label>
+              <input
+                type="date"
+                className="input-texto"
+                value={eventoFecha}
+                onChange={(e) =>
+                  setEventoFecha(
+                    e.target.value
+                  )
+                }
+              />
 
-                <input
-                  type="date"
-                  className="input-texto"
-                  value={eventoFecha}
-                  onChange={(evento) =>
-                    setEventoFecha(
-                      evento.target.value
-                    )
-                  }
-                />
+              <label>
+                Descripción
+              </label>
 
-              </div>
-
-              <div>
-
-                <label
-                  style={{
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    color: '#5b6a62',
-                    display: 'block',
-                    marginBottom:
-                      '6px',
-                  }}
-                >
-                  Descripción
-                </label>
-
-                <input
-                  type="text"
-                  className="input-texto"
-                  value={eventoDesc}
-                  onChange={(evento) =>
-                    setEventoDesc(
-                      evento.target.value
-                    )
-                  }
-                  placeholder="Ej: Revisar stock de Karité"
-                />
-
-              </div>
+              <input
+                type="text"
+                className="input-texto"
+                value={eventoDesc}
+                onChange={(e) =>
+                  setEventoDesc(
+                    e.target.value
+                  )
+                }
+                placeholder="Ej: Revisar stock de Karité"
+              />
 
             </div>
 
@@ -1992,8 +1501,8 @@ function PanelEmpleado() {
               <button
                 type="button"
                 className="btn-sec"
-                onClick={
-                  cancelarEvento
+                onClick={() =>
+                  setModalEvento(false)
                 }
               >
                 Cancelar
@@ -2002,15 +1511,10 @@ function PanelEmpleado() {
               <button
                 type="button"
                 className="btn-pri"
-                onClick={
-                  guardarEvento
-                }
+                onClick={guardarEvento}
               >
-
                 <i className="fas fa-check"></i>
-
                 Agregar
-
               </button>
 
             </div>
@@ -2021,21 +1525,12 @@ function PanelEmpleado() {
       )}
 
       {/* TOAST */}
-      <div
-        className={`toast ${
-          toastVisible
-            ? 'visible'
-            : ''
-        }`}
-      >
-
-        <i className="fas fa-circle-check"></i>
-
-        <span>
-          {toastMensaje}
-        </span>
-
-      </div>
+      {toastVisible && (
+        <div className="panel-toast">
+          <i className="fas fa-circle-check"></i>
+          <span>{toastMensaje}</span>
+        </div>
+      )}
 
     </div>
   );

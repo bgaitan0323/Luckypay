@@ -1,3 +1,4 @@
+
 import React, { useMemo, useState } from 'react';
 import '../styles/metadeventas.css';
 import logo from '../WhatsApp Image 2026-09-04 at 12.00.05.jpeg';
@@ -95,27 +96,49 @@ function MetaDeVentas() {
   return (
     <div className="meta-page">
 
-      {/* NAVBAR */}
+      {/* =========================
+          NAVBAR
+      ========================== */}
       <header className="meta-navbar">
 
-        <button
-          className={`meta-menu-btn ${
-            menuAbierto ? 'activo' : ''
-          }`}
-          onClick={() => setMenuAbierto(!menuAbierto)}
-          aria-label="Abrir menú"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <div className="meta-navbar-left">
 
-        <div className="meta-brand">
-          <img src={logo} alt="LuckyPay" />
-          <span>LuckyPay</span>
+          <button
+            type="button"
+            className={`meta-menu-btn ${
+              menuAbierto ? 'activo' : ''
+            }`}
+            onClick={() =>
+              setMenuAbierto((estado) => !estado)
+            }
+            aria-label={
+              menuAbierto
+                ? 'Cerrar menú'
+                : 'Abrir menú'
+            }
+          >
+            {menuAbierto ? (
+              <span className="meta-menu-x">×</span>
+            ) : (
+              <>
+                <span></span>
+                <span></span>
+                <span></span>
+              </>
+            )}
+          </button>
+
+          <div className="meta-brand">
+            <img src={logo} alt="LuckyPay" />
+
+            <div>
+              <strong>LuckyPay</strong>
+              <small>Control de ventas</small>
+            </div>
+          </div>
+
         </div>
 
-        {/* BLOQUE DE USUARIO */}
         <div className="meta-welcome">
 
           <div className="meta-user-info">
@@ -124,6 +147,7 @@ function MetaDeVentas() {
           </div>
 
           <button
+            type="button"
             className="meta-logout-btn"
             onClick={cerrarSesion}
           >
@@ -134,15 +158,20 @@ function MetaDeVentas() {
 
       </header>
 
-      {/* OVERLAY */}
+      {/* =========================
+          OVERLAY
+      ========================== */}
       {menuAbierto && (
         <div
           className="meta-menu-overlay"
           onClick={() => setMenuAbierto(false)}
-        ></div>
+          aria-hidden="true"
+        />
       )}
 
-      {/* SIDEBAR */}
+      {/* =========================
+          SIDEBAR
+      ========================== */}
       <aside
         className={`meta-sidebar ${
           menuAbierto ? 'abierto' : ''
@@ -150,112 +179,142 @@ function MetaDeVentas() {
       >
 
         <div className="meta-sidebar-header">
-          <strong>Menú</strong>
+
+          <div>
+            <span className="meta-sidebar-title">
+              MENÚ PRINCIPAL
+            </span>
+
+            <p>Administración</p>
+          </div>
 
           <button
+            type="button"
             className="meta-sidebar-close"
             onClick={() => setMenuAbierto(false)}
+            aria-label="Cerrar menú"
           >
             ×
           </button>
+
         </div>
 
-        <button
-          className="meta-sidebar-item"
-          onClick={() => navegar('/panel')}
-        >
-          <span>⌂</span>
-          Inicio
-        </button>
+        <nav className="meta-sidebar-nav">
 
-        <button
-          className="meta-sidebar-item"
-          onClick={() => navegar('/insumos')}
-        >
-          <span>▣</span>
-          Insumos
-        </button>
+          <button
+            type="button"
+            className="meta-sidebar-item"
+            onClick={() => navegar('/panel')}
+          >
+            <span className="meta-sidebar-icon">⌂</span>
+            <span>Inicio</span>
+          </button>
 
-        <button
-          className="meta-sidebar-item"
-          onClick={() => navegar('/productos')}
-        >
-          <span>▤</span>
-          Productos
-        </button>
+          <button
+            type="button"
+            className="meta-sidebar-item"
+            onClick={() => navegar('/insumos')}
+          >
+            <span className="meta-sidebar-icon">▤</span>
+            <span>Insumos</span>
+          </button>
 
-        <button
-          className="meta-sidebar-item"
-          onClick={() => navegar('/costos')}
-        >
-          <span>▥</span>
-          Costos
-        </button>
+          <button
+            type="button"
+            className="meta-sidebar-item"
+            onClick={() => navegar('/productos')}
+          >
+            <span className="meta-sidebar-icon">◆</span>
+            <span>Productos</span>
+          </button>
 
-        <button
-          className="meta-sidebar-item activo"
-          onClick={() => navegar('/meta-ventas')}
-        >
-          <span>◈</span>
-          Meta de Ventas
-        </button>
+          <button
+            type="button"
+            className="meta-sidebar-item"
+            onClick={() => navegar('/costos')}
+          >
+            <span className="meta-sidebar-icon">$</span>
+            <span>Costos</span>
+          </button>
 
-        <button
-          className="meta-sidebar-item"
-          onClick={() => navegar('/usuarios')}
-        >
-          <span>♙</span>
-          Usuarios y Roles
-        </button>
+          <button
+            type="button"
+            className="meta-sidebar-item activo"
+            onClick={() => setMenuAbierto(false)}
+          >
+            <span className="meta-sidebar-icon">◇</span>
+            <span>Meta de Ventas</span>
+          </button>
 
-        <button
-          className="meta-sidebar-item"
-          onClick={() => navegar('/analisis')}
-        >
-          <span className="meta-sidebar-icon">▦</span>
-          <span>Análisis</span>
-        </button>
+          <button
+            type="button"
+            className="meta-sidebar-item"
+            onClick={() => navegar('/usuarios')}
+          >
+            <span className="meta-sidebar-icon">♙</span>
+            <span>Usuarios y Roles</span>
+          </button>
 
-        <button
-          className="meta-sidebar-item"
-          onClick={() => navegar('/reportes')}
-        >
-          <span className="meta-sidebar-icon">▤</span>
-          <span>Reportes</span>
-        </button>
+          <div className="meta-sidebar-separator"></div>
 
-        <button
-          className="meta-sidebar-item"
-          onClick={() => navegar('/auditoria')}
-        >
-          <span className="meta-sidebar-icon">☷</span>
-          <span>Auditoría</span>
-        </button>
+          <button
+            type="button"
+            className="meta-sidebar-item"
+            onClick={() => navegar('/analisis')}
+          >
+            <span className="meta-sidebar-icon">◫</span>
+            <span>Análisis</span>
+          </button>
 
-        <button
-          className="meta-sidebar-item"
-          onClick={() => navegar('/configuracion')}
-        >
-          <span className="meta-sidebar-icon">⚙</span>
-          <span>Configuración</span>
-        </button>
+          <button
+            type="button"
+            className="meta-sidebar-item"
+            onClick={() => navegar('/reportes')}
+          >
+            <span className="meta-sidebar-icon">▤</span>
+            <span>Reportes</span>
+          </button>
 
-        <div className="meta-sidebar-separator"></div>
+          <button
+            type="button"
+            className="meta-sidebar-item"
+            onClick={() => navegar('/auditoria')}
+          >
+            <span className="meta-sidebar-icon">☷</span>
+            <span>Auditoría</span>
+          </button>
 
-        <button
-          className="meta-sidebar-item meta-logout"
-          onClick={cerrarSesion}
-        >
-          <span>↪</span>
-          Cerrar sesión
-        </button>
+          <button
+            type="button"
+            className="meta-sidebar-item"
+            onClick={() => navegar('/configuracion')}
+          >
+            <span className="meta-sidebar-icon">⚙</span>
+            <span>Configuración</span>
+          </button>
+
+        </nav>
+
+        <div className="meta-sidebar-bottom">
+
+          <button
+            type="button"
+            className="meta-sidebar-logout"
+            onClick={cerrarSesion}
+          >
+            <span className="meta-sidebar-icon">↪</span>
+            <span>Cerrar sesión</span>
+          </button>
+
+        </div>
 
       </aside>
 
-      {/* CONTENIDO PRINCIPAL */}
+      {/* =========================
+          CONTENIDO PRINCIPAL
+      ========================== */}
       <main className="meta-main">
 
-        {/* ENCABEZADO */}
         <div className="meta-heading">
 
           <div>
@@ -277,64 +336,80 @@ function MetaDeVentas() {
 
         </div>
 
-        {/* ESTADÍSTICAS */}
+        {/* =========================
+            ESTADÍSTICAS
+        ========================== */}
         <section className="meta-stats">
 
           <div className="meta-stat-card">
+
             <div className="meta-stat-icon">
               🎯
             </div>
 
             <div>
               <span>Meta mensual</span>
+
               <strong>
                 {formatear(metaMensual)}
               </strong>
             </div>
+
           </div>
 
           <div className="meta-stat-card">
+
             <div className="meta-stat-icon">
               💰
             </div>
 
             <div>
               <span>Ventas actuales</span>
+
               <strong>
                 {formatear(ventasActuales)}
               </strong>
             </div>
+
           </div>
 
           <div className="meta-stat-card">
+
             <div className="meta-stat-icon">
               📈
             </div>
 
             <div>
               <span>Progreso</span>
+
               <strong>
                 {progreso.toFixed(1)}%
               </strong>
             </div>
+
           </div>
 
           <div className="meta-stat-card">
+
             <div className="meta-stat-icon">
               ⏳
             </div>
 
             <div>
               <span>Falta por vender</span>
+
               <strong>
                 {formatear(falta)}
               </strong>
             </div>
+
           </div>
 
         </section>
 
-        {/* PROGRESO Y CONFIGURACIÓN */}
+        {/* =========================
+            PROGRESO + CONFIGURACIÓN
+        ========================== */}
         <section className="meta-grid">
 
           <div className="meta-card meta-progress-card">
@@ -358,15 +433,18 @@ function MetaDeVentas() {
             </div>
 
             <div className="meta-progress-track">
+
               <div
                 className="meta-progress-bar"
                 style={{
                   width: `${progreso}%`
                 }}
               ></div>
+
             </div>
 
             <div className="meta-progress-values">
+
               <span>
                 {formatear(ventasActuales)}
               </span>
@@ -374,19 +452,21 @@ function MetaDeVentas() {
               <span>
                 {formatear(metaMensual)}
               </span>
+
             </div>
 
             <div className="meta-message">
+
               {progreso >= 100
-                ? '🎉 ¡Meta alcanzada! Excelente trabajo.'
+                ? '¡Meta alcanzada! Excelente trabajo.'
                 : `Te faltan ${formatear(
                     falta
                   )} para alcanzar la meta.`}
+
             </div>
 
           </div>
 
-          {/* CONFIGURACIÓN */}
           <div className="meta-card">
 
             <div className="meta-card-header">
@@ -403,7 +483,10 @@ function MetaDeVentas() {
 
             </div>
 
-            <label className="meta-input-label">
+            <label
+              className="meta-input-label"
+              htmlFor="meta-mensual"
+            >
               Meta mensual
             </label>
 
@@ -412,6 +495,7 @@ function MetaDeVentas() {
               <span>$</span>
 
               <input
+                id="meta-mensual"
                 type="number"
                 min="0"
                 value={metaMensual}
@@ -425,6 +509,7 @@ function MetaDeVentas() {
             </div>
 
             <button
+              type="button"
               className="meta-save-btn"
               onClick={guardarMeta}
             >
@@ -435,7 +520,9 @@ function MetaDeVentas() {
 
         </section>
 
-        {/* INFORMACIÓN */}
+        {/* =========================
+            INFORMACIÓN
+        ========================== */}
         <section className="meta-info-grid">
 
           <div className="meta-info-card">
@@ -494,7 +581,9 @@ function MetaDeVentas() {
 
         </section>
 
-        {/* GRÁFICA */}
+        {/* =========================
+            GRÁFICA
+        ========================== */}
         <section className="meta-card meta-chart-card">
 
           <div className="meta-card-header">
@@ -522,7 +611,9 @@ function MetaDeVentas() {
               );
 
               const altura =
-                (venta.valor / maxVenta) * 100;
+                maxVenta > 0
+                  ? (venta.valor / maxVenta) * 100
+                  : 0;
 
               return (
                 <div
@@ -557,7 +648,9 @@ function MetaDeVentas() {
 
         </section>
 
-        {/* VENTAS RECIENTES */}
+        {/* =========================
+            VENTAS RECIENTES
+        ========================== */}
         <section className="meta-card meta-sales-card">
 
           <div className="meta-card-header">
@@ -581,10 +674,12 @@ function MetaDeVentas() {
           <div className="meta-sales-table">
 
             <div className="meta-sales-row meta-sales-head">
+
               <span>Producto</span>
               <span>Cliente</span>
               <span>Fecha</span>
               <span>Valor</span>
+
             </div>
 
             {ventasRecientes.map(
@@ -592,7 +687,7 @@ function MetaDeVentas() {
 
                 <div
                   className="meta-sales-row"
-                  key={index}
+                  key={`${venta.producto}-${index}`}
                 >
 
                   <span className="meta-product-name">
@@ -612,6 +707,7 @@ function MetaDeVentas() {
                   </strong>
 
                 </div>
+
               )
             )}
 
@@ -631,3 +727,4 @@ function MetaDeVentas() {
 }
 
 export default MetaDeVentas;
+

@@ -1,572 +1,621 @@
+
 import React, { useMemo, useState } from 'react';
 import '../styles/Productos.css';
 import logo from '../WhatsApp Image 2026-09-04 at 12.00.05.jpeg';
 
-function Productos() {
-  const [productos, setProductos] = useState([
-    {
-      id: 1,
-      nombre: 'Silla ergonómica mod. A',
-      descripcion: 'Silla de oficina con soporte lumbar ajustable.',
-      unidad: 'unidad',
-      manoObra: 25000,
-      insumos: [
-        { nombre: 'Madera pino', cantidad: 2, unidad: 'm' },
-        { nombre: 'Tela tapizado', cantidad: 1.5, unidad: 'metro' },
-        { nombre: 'Tornillos acero', cantidad: 12, unidad: 'unidad' }
-      ]
-    },
-    {
-      id: 2,
-      nombre: 'Mesa de trabajo',
-      descripcion: 'Mesa industrial para taller o bodega.',
-      unidad: 'unidad',
-      manoObra: 40000,
-      insumos: [
-        { nombre: 'Madera pino', cantidad: 5, unidad: 'm' },
-        { nombre: 'Tornillos acero', cantidad: 20, unidad: 'unidad' },
-        { nombre: 'Barniz acabado', cantidad: 0.5, unidad: 'litro' }
-      ]
-    }
-  ]);
+const PRODUCTOS_INICIALES = [
+  {
+    id: 1,
+    nombre: 'Silla ergonómica mod. A',
+    descripcion: 'Silla de oficina con soporte lumbar ajustable.',
+    unidad: 'Unidad',
+    manoObra: 85000,
+    insumos: [
+      {
+        id: 1,
+        nombre: 'Madera pino',
+        cantidad: 2
+      },
+      {
+        id: 2,
+        nombre: 'Tela tapizado',
+        cantidad: 1
+      },
+      {
+        id: 3,
+        nombre: 'Espuma relleno',
+        cantidad: 1
+      }
+    ]
+  },
+  {
+    id: 2,
+    nombre: 'Mesa de trabajo',
+    descripcion: 'Mesa industrial para taller o bodega.',
+    unidad: 'Unidad',
+    manoObra: 100000,
+    insumos: [
+      {
+        id: 4,
+        nombre: 'Madera pino',
+        cantidad: 4
+      },
+      {
+        id: 5,
+        nombre: 'Tornillos acero',
+        cantidad: 1
+      },
+      {
+        id: 6,
+        nombre: 'Barniz acabado',
+        cantidad: 1
+      }
+    ]
+  }
+];
 
-  const insumosDisponibles = [
-    { nombre: 'Madera pino', unidad: 'm' },
-    { nombre: 'Tornillos acero', unidad: 'unidad' },
-    { nombre: 'Pintura base', unidad: 'litro' },
-    { nombre: 'Tela tapizado', unidad: 'metro' },
-    { nombre: 'Espuma relleno', unidad: 'kg' },
-    { nombre: 'Barniz acabado', unidad: 'litro' }
-  ];
+const INSUMOS_DISPONIBLES = [
+  'Madera pino',
+  'Tornillos acero',
+  'Pintura base',
+  'Tela tapizado',
+  'Espuma relleno',
+  'Barniz acabado'
+];
+
+function formatearCOP(valor) {
+  return new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    maximumFractionDigits: 0
+  }).format(Number(valor) || 0);
+}
+
+function crearInsumoVacio() {
+  return {
+    id: Date.now() + Math.random(),
+    nombre: '',
+    cantidad: 1
+  };
+}
+
+function Productos() {
+  /* =====================================================
+     ESTADOS
+     ===================================================== */
+
+  const [productos, setProductos] = useState(PRODUCTOS_INICIALES);
+
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
   const [busqueda, setBusqueda] = useState('');
-  const [menuAbierto, setMenuAbierto] = useState(false);
-  const [modalProducto, setModalProducto] = useState(false);
+
+  const [modalAbierto, setModalAbierto] = useState(false);
+
   const [modalEliminar, setModalEliminar] = useState(false);
 
-  const [productoEditando, setProductoEditando] = useState(null);
-  const [productoAEliminar, setProductoAEliminar] = useState(null);
+  const [productoEditar, setProductoEditar] = useState(null);
 
-  const [nombre, setNombre] = useState('');
-  const [descripcion, setDescripcion] = useState('');
-  const [unidad, setUnidad] = useState('');
-  const [manoObra, setManoObra] = useState('');
-  const [insumos, setInsumos] = useState([]);
+  const [productoEliminar, setProductoEliminar] = useState(null);
+
+  const [mensaje, setMensaje] = useState('');
+
+  const [formulario, setFormulario] = useState({
+    nombre: '',
+    descripcion: '',
+    unidad: 'Unidad',
+    manoObra: '',
+    insumos: []
+  });
+
+  /* =====================================================
+     FILTRO
+     ===================================================== */
 
   const productosFiltrados = useMemo(() => {
-    return productos.filter((producto) =>
-      producto.nombre
-        .toLowerCase()
-        .includes(busqueda.toLowerCase())
-    );
+    const texto = busqueda.trim().toLowerCase();
+
+    if (!texto) {
+      return productos;
+    }
+
+    return productos.filter((producto) => {
+      return (
+        producto.nombre.toLowerCase().includes(texto) ||
+        producto.descripcion.toLowerCase().includes(texto)
+      );
+    });
   }, [productos, busqueda]);
 
-  const formatearCOP = (valor) => {
-    return '$ ' + Number(valor || 0).toLocaleString('es-CO');
+  /* =====================================================
+     MENSAJE TEMPORAL
+     ===================================================== */
+
+  const mostrarMensaje = (texto) => {
+    setMensaje(texto);
+
+    window.setTimeout(() => {
+      setMensaje('');
+    }, 2500);
   };
 
-  const abrirNuevoProducto = () => {
-    setProductoEditando(null);
-    setNombre('');
-    setDescripcion('');
-    setUnidad('');
-    setManoObra('');
-    setInsumos([]);
-    setModalProducto(true);
-  };
-
-  const abrirEditarProducto = (producto) => {
-    setProductoEditando(producto);
-
-    setNombre(producto.nombre);
-    setDescripcion(producto.descripcion || '');
-    setUnidad(producto.unidad);
-    setManoObra(producto.manoObra);
-
-    setInsumos(
-      producto.insumos.map((insumo) => ({
-        ...insumo
-      }))
-    );
-
-    setModalProducto(true);
-  };
-
-  const cerrarModalProducto = () => {
-    setModalProducto(false);
-    setProductoEditando(null);
-  };
-
-  const agregarInsumo = () => {
-    setInsumos([
-      ...insumos,
-      {
-        nombre: '',
-        cantidad: '',
-        unidad: ''
-      }
-    ]);
-  };
-
-  const actualizarInsumo = (indice, campo, valor) => {
-    const copia = [...insumos];
-
-    copia[indice] = {
-      ...copia[indice],
-      [campo]: valor
-    };
-
-    if (campo === 'nombre') {
-      const encontrado = insumosDisponibles.find(
-        (insumo) => insumo.nombre === valor
-      );
-
-      copia[indice].unidad = encontrado
-        ? encontrado.unidad
-        : '';
-    }
-
-    setInsumos(copia);
-  };
-
-  const eliminarFilaInsumo = (indice) => {
-    setInsumos(
-      insumos.filter((_, index) => index !== indice)
-    );
-  };
-
-  const guardarProducto = () => {
-    if (!nombre.trim()) {
-      alert('El nombre del producto es obligatorio.');
-      return;
-    }
-
-    if (!unidad) {
-      alert('Selecciona una unidad de medida.');
-      return;
-    }
-
-    if (
-      manoObra === '' ||
-      Number(manoObra) < 0 ||
-      Number.isNaN(Number(manoObra))
-    ) {
-      alert('Ingresa un costo de mano de obra válido.');
-      return;
-    }
-
-    const insumosValidos = insumos.every(
-      (insumo) =>
-        insumo.nombre &&
-        Number(insumo.cantidad) > 0
-    );
-
-    if (!insumosValidos && insumos.length > 0) {
-      alert(
-        'Completa correctamente todos los insumos agregados.'
-      );
-      return;
-    }
-
-    const datosProducto = {
-      nombre: nombre.trim(),
-      descripcion: descripcion.trim(),
-      unidad,
-      manoObra: Number(manoObra),
-      insumos: insumos.map((insumo) => ({
-        ...insumo,
-        cantidad: Number(insumo.cantidad)
-      }))
-    };
-
-    if (productoEditando) {
-      setProductos(
-        productos.map((producto) =>
-          producto.id === productoEditando.id
-            ? {
-                ...producto,
-                ...datosProducto
-              }
-            : producto
-        )
-      );
-
-      alert('Producto actualizado correctamente.');
-    } else {
-      const nuevoProducto = {
-        id: Date.now(),
-        ...datosProducto
-      };
-
-      setProductos([
-        ...productos,
-        nuevoProducto
-      ]);
-
-      alert('Producto creado correctamente.');
-    }
-
-    cerrarModalProducto();
-  };
-
-  const solicitarEliminar = (producto) => {
-    setProductoAEliminar(producto);
-    setModalEliminar(true);
-  };
-
-  const cancelarEliminar = () => {
-    setProductoAEliminar(null);
-    setModalEliminar(false);
-  };
-
-  const confirmarEliminar = () => {
-    if (!productoAEliminar) return;
-
-    setProductos(
-      productos.filter(
-        (producto) =>
-          producto.id !== productoAEliminar.id
-      )
-    );
-
-    setProductoAEliminar(null);
-    setModalEliminar(false);
-
-    alert('Producto eliminado correctamente.');
-  };
-
-  const iconoUnidad = (valor) => {
-    const iconos = {
-      unidad: '▣',
-      kg: '⚖',
-      g: '⚖',
-      litro: '◉',
-      ml: '◉',
-      metro: '↔',
-      caja: '□',
-      docena: '▦'
-    };
-
-    return iconos[valor] || '◆';
-  };
+  /* =====================================================
+     NAVEGACION
+     ===================================================== */
 
   const navegar = (ruta) => {
     setMenuAbierto(false);
     window.location.href = ruta;
   };
 
+  /* =====================================================
+     CERRAR SESION
+     ===================================================== */
+
   const cerrarSesion = () => {
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('rol');
-    sessionStorage.removeItem('usuario');
-    sessionStorage.removeItem('rol');
+    localStorage.clear();
+    sessionStorage.clear();
 
     window.location.href = '/';
   };
 
+  /* =====================================================
+     ABRIR CREAR
+     ===================================================== */
+
+  const abrirCrear = () => {
+    setProductoEditar(null);
+
+    setFormulario({
+      nombre: '',
+      descripcion: '',
+      unidad: 'Unidad',
+      manoObra: '',
+      insumos: []
+    });
+
+    setModalAbierto(true);
+  };
+
+  /* =====================================================
+     ABRIR EDITAR
+     ===================================================== */
+
+  const abrirEditar = (producto) => {
+    setProductoEditar(producto);
+
+    setFormulario({
+      nombre: producto.nombre,
+      descripcion: producto.descripcion,
+      unidad: producto.unidad,
+      manoObra: producto.manoObra,
+      insumos: producto.insumos.map((insumo) => ({
+        ...insumo
+      }))
+    });
+
+    setModalAbierto(true);
+  };
+
+  /* =====================================================
+     CERRAR MODAL
+     ===================================================== */
+
+  const cerrarModal = () => {
+    setModalAbierto(false);
+    setProductoEditar(null);
+  };
+
+  /* =====================================================
+     CAMBIAR FORMULARIO
+     ===================================================== */
+
+  const cambiarCampo = (campo, valor) => {
+    setFormulario((actual) => ({
+      ...actual,
+      [campo]: valor
+    }));
+  };
+
+  /* =====================================================
+     AGREGAR INSUMO
+     ===================================================== */
+
+  const agregarInsumo = () => {
+    setFormulario((actual) => ({
+      ...actual,
+      insumos: [
+        ...actual.insumos,
+        crearInsumoVacio()
+      ]
+    }));
+  };
+
+  /* =====================================================
+     ACTUALIZAR INSUMO
+     ===================================================== */
+
+  const actualizarInsumo = (id, campo, valor) => {
+    setFormulario((actual) => ({
+      ...actual,
+      insumos: actual.insumos.map((insumo) => {
+        if (insumo.id !== id) {
+          return insumo;
+        }
+
+        return {
+          ...insumo,
+          [campo]: campo === 'cantidad'
+            ? Number(valor)
+            : valor
+        };
+      })
+    }));
+  };
+
+  /* =====================================================
+     ELIMINAR INSUMO
+     ===================================================== */
+
+  const eliminarInsumo = (id) => {
+    setFormulario((actual) => ({
+      ...actual,
+      insumos: actual.insumos.filter(
+        (insumo) => insumo.id !== id
+      )
+    }));
+  };
+
+  /* =====================================================
+     GUARDAR PRODUCTO
+     ===================================================== */
+
+  const guardarProducto = (evento) => {
+    evento.preventDefault();
+
+    const nombre = formulario.nombre.trim();
+
+    if (!nombre) {
+      mostrarMensaje('Debes ingresar el nombre del producto.');
+      return;
+    }
+
+    const manoObra = Number(formulario.manoObra) || 0;
+
+    const insumosLimpios = formulario.insumos
+      .filter((insumo) => insumo.nombre.trim() !== '')
+      .map((insumo) => ({
+        ...insumo,
+        nombre: insumo.nombre.trim(),
+        cantidad: Number(insumo.cantidad) || 1
+      }));
+
+    if (productoEditar) {
+      setProductos((actuales) =>
+        actuales.map((producto) => {
+          if (producto.id !== productoEditar.id) {
+            return producto;
+          }
+
+          return {
+            ...producto,
+            nombre,
+            descripcion: formulario.descripcion.trim(),
+            unidad: formulario.unidad,
+            manoObra,
+            insumos: insumosLimpios
+          };
+        })
+      );
+
+      cerrarModal();
+
+      mostrarMensaje('Producto actualizado correctamente.');
+
+      return;
+    }
+
+    const nuevoProducto = {
+      id: Date.now(),
+      nombre,
+      descripcion: formulario.descripcion.trim(),
+      unidad: formulario.unidad,
+      manoObra,
+      insumos: insumosLimpios
+    };
+
+    setProductos((actuales) => [
+      ...actuales,
+      nuevoProducto
+    ]);
+
+    cerrarModal();
+
+    mostrarMensaje('Producto creado correctamente.');
+  };
+
+  /* =====================================================
+     ABRIR ELIMINAR
+     ===================================================== */
+
+  const abrirEliminar = (producto) => {
+    setProductoEliminar(producto);
+    setModalEliminar(true);
+  };
+
+  /* =====================================================
+     CERRAR ELIMINAR
+     ===================================================== */
+
+  const cerrarEliminar = () => {
+    setModalEliminar(false);
+    setProductoEliminar(null);
+  };
+
+  /* =====================================================
+     CONFIRMAR ELIMINAR
+     ===================================================== */
+
+  const confirmarEliminar = () => {
+    if (!productoEliminar) {
+      return;
+    }
+
+    setProductos((actuales) =>
+      actuales.filter(
+        (producto) => producto.id !== productoEliminar.id
+      )
+    );
+
+    cerrarEliminar();
+
+    mostrarMensaje('Producto eliminado correctamente.');
+  };
+
+  /* =====================================================
+     RENDER
+     ===================================================== */
+
   return (
     <div className="productos-page">
 
-      {/* =========================
+      {/* =================================================
           NAVBAR
-      ========================= */}
+          ================================================= */}
 
       <header className="productos-navbar">
 
-        <button
-          type="button"
-          className={`productos-menu ${
-            menuAbierto ? 'abierto' : ''
-          }`}
-          onClick={() => setMenuAbierto(!menuAbierto)}
-          aria-label={
-            menuAbierto
-              ? 'Cerrar menú'
-              : 'Abrir menú'
-          }
-        >
-          {menuAbierto ? (
-            <span className="productos-menu-x">
-              ×
-            </span>
-          ) : (
-            <>
-              <span></span>
-              <span></span>
-              <span></span>
-            </>
-          )}
-        </button>
+        <div className="productos-navbar-left">
 
-        <div className="productos-brand">
+          {/* BOTON MENU */}
 
-          <img
-            src={logo}
-            alt="LuckyPay"
-          />
+          <button
+            type="button"
+            className={`productos-menu ${
+              menuAbierto ? 'active' : ''
+            }`}
+            onClick={() => {
+              setMenuAbierto((estado) => !estado);
+            }}
+            aria-label={
+              menuAbierto
+                ? 'Cerrar menú'
+                : 'Abrir menú'
+            }
+          >
+            {menuAbierto ? (
+              <span className="productos-menu-x">
+                ×
+              </span>
+            ) : (
+              <>
+                <span></span>
+                <span></span>
+                <span></span>
+              </>
+            )}
+          </button>
 
-          <div>
-            <span>LuckyPay</span>
-            <small>
-              Gestión de productos
-            </small>
+          {/* MARCA */}
+
+          <div className="productos-brand">
+
+            <img
+              src={logo}
+              alt="LuckyPay"
+            />
+
+            <div className="productos-brand-text">
+              <div className="productos-brand-title">
+                LuckyPay
+              </div>
+
+              <div className="productos-brand-subtitle">
+                Gestión de productos
+              </div>
+            </div>
+
           </div>
 
         </div>
 
         <div className="productos-admin">
 
-          <div>
-            <strong>
-              Bienvenido Administrador
-            </strong>
-
-            <small>
-              Gestión de productos
-            </small>
-          </div>
-
           <button
             type="button"
             className="productos-salir"
             onClick={cerrarSesion}
           >
-            Salir
+            Cerrar sesión
           </button>
 
         </div>
 
       </header>
 
-      {/* OVERLAY */}
+      {/* =================================================
+          MENU LATERAL
+          SOLO EXISTE CUANDO menuAbierto === true
+          ================================================= */}
 
       {menuAbierto && (
-        <div
-          className="productos-overlay"
-          onClick={() =>
-            setMenuAbierto(false)
-          }
-        />
+        <>
+          <div
+            className="productos-overlay"
+            onClick={() => {
+              setMenuAbierto(false);
+            }}
+            aria-hidden="true"
+          />
+
+          <aside className="productos-sidebar">
+
+            <div className="productos-sidebar-header">
+              <span>
+                MENÚ PRINCIPAL
+              </span>
+            </div>
+
+            <nav className="productos-sidebar-menu">
+
+              <button
+                type="button"
+                onClick={() => navegar('/panel')}
+              >
+                <span className="productos-menu-icon">
+                  ⌂
+                </span>
+
+                Inicio
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navegar('/insumos')}
+              >
+                <span className="productos-menu-icon">
+                  ▤
+                </span>
+
+                Insumos
+              </button>
+
+              <button
+                type="button"
+                className="active"
+              >
+                <span className="productos-menu-icon">
+                  ◆
+                </span>
+
+                Productos
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navegar('/costos')}
+              >
+                <span className="productos-menu-icon">
+                  $
+                </span>
+
+                Costos
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navegar('/meta-ventas')}
+              >
+                <span className="productos-menu-icon">
+                  ◎
+                </span>
+
+                Meta de Ventas
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navegar('/usuarios')}
+              >
+                <span className="productos-menu-icon">
+                  ♙
+                </span>
+
+                Usuarios y Roles
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navegar('/analisis')}
+              >
+                <span className="productos-menu-icon">
+                  ◔
+                </span>
+
+                Análisis
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navegar('/reportes')}
+              >
+                <span className="productos-menu-icon">
+                  ▤
+                </span>
+
+                Reportes
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navegar('/auditoria')}
+              >
+                <span className="productos-menu-icon">
+                  ☷
+                </span>
+
+                Auditoría
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navegar('/configuracion')}
+              >
+                <span className="productos-menu-icon">
+                  ⚙
+                </span>
+
+                Configuración
+              </button>
+
+            </nav>
+
+            <div className="productos-sidebar-bottom">
+
+              <button
+                type="button"
+                onClick={cerrarSesion}
+              >
+                <span className="productos-menu-icon">
+                  ↪
+                </span>
+
+                Cerrar sesión
+              </button>
+
+            </div>
+
+          </aside>
+        </>
       )}
 
-      {/* =========================
-          SIDEBAR
-      ========================= */}
-
-      <aside
-        className={`productos-sidebar ${
-          menuAbierto ? 'abierto' : ''
-        }`}
-      >
-
-        <div className="productos-sidebar-header">
-
-          <div>
-            <strong>
-              MENÚ PRINCIPAL
-            </strong>
-
-            <small>
-              Administración
-            </small>
-          </div>
-
-          <button
-            type="button"
-            className="productos-sidebar-close"
-            onClick={() =>
-              setMenuAbierto(false)
-            }
-            aria-label="Cerrar menú"
-          >
-            ×
-          </button>
-
-        </div>
-
-        <div className="productos-sidebar-menu">
-
-          <button
-            type="button"
-            onClick={() =>
-              navegar('/panel')
-            }
-          >
-            <span className="productos-menu-icon">
-              ⌂
-            </span>
-
-            <span>
-              Inicio
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              navegar('/insumos')
-            }
-          >
-            <span className="productos-menu-icon">
-              ▤
-            </span>
-
-            <span>
-              Insumos
-            </span>
-          </button>
-
-          <button
-            type="button"
-            className="activo"
-            onClick={() =>
-              setMenuAbierto(false)
-            }
-          >
-            <span className="productos-menu-icon">
-              ◆
-            </span>
-
-            <span>
-              Productos
-            </span>
-          </button>
-
-          <div className="productos-sidebar-separador"></div>
-
-          <button
-            type="button"
-            onClick={() =>
-              navegar('/costos')
-            }
-          >
-            <span className="productos-menu-icon">
-              $
-            </span>
-
-            <span>
-              Costos
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              navegar('/meta-ventas')
-            }
-          >
-            <span className="productos-menu-icon">
-              ⚖
-            </span>
-
-            <span>
-              Meta de Ventas
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              navegar('/usuarios')
-            }
-          >
-            <span className="productos-menu-icon">
-              ♟
-            </span>
-
-            <span>
-              Usuarios y Roles
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              navegar('/analisis')
-            }
-          >
-            <span className="productos-menu-icon">
-              ◔
-            </span>
-
-            <span>
-              Análisis
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              navegar('/reportes')
-            }
-          >
-            <span className="productos-menu-icon">
-              ▤
-            </span>
-
-            <span>
-              Reportes
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              navegar('/auditoria')
-            }
-          >
-            <span className="productos-menu-icon">
-              ☷
-            </span>
-
-            <span>
-              Auditoría
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              navegar('/configuracion')
-            }
-          >
-            <span className="productos-menu-icon">
-              ⚙
-            </span>
-
-            <span>
-              Configuración
-            </span>
-          </button>
-
-        </div>
-
-        <div className="productos-sidebar-bottom">
-
-          <button
-            type="button"
-            onClick={cerrarSesion}
-          >
-            <span className="productos-menu-icon">
-              ↪
-            </span>
-
-            <span>
-              Cerrar sesión
-            </span>
-          </button>
-
-        </div>
-
-      </aside>
-
-      {/* =========================
+      {/* =================================================
           CONTENIDO
-      ========================= */}
+          ================================================= */}
 
       <main className="productos-main">
 
-        <div className="productos-header">
+        <section className="productos-header">
 
           <span className="productos-label">
             INVENTARIO
@@ -578,10 +627,14 @@ function Productos() {
 
           <p>
             Registra los productos que fabricas,
-            sus insumos y el costo de mano de obra.
+            sus insumos y costos de producción.
           </p>
 
-        </div>
+        </section>
+
+        {/* =================================================
+            CARD
+            ================================================= */}
 
         <section className="productos-card">
 
@@ -599,485 +652,449 @@ function Productos() {
             </div>
 
             <button
+              type="button"
               className="btn-producto-primary"
-              onClick={abrirNuevoProducto}
+              onClick={abrirCrear}
             >
               + Nuevo producto
             </button>
 
           </div>
 
-          <div className="productos-search">
+          {/* =================================================
+              MENSAJE
+              ================================================= */}
 
-            <span>
-              ⌕
-            </span>
+          {mensaje && (
+            <div className="productos-mensaje">
+              {mensaje}
+            </div>
+          )}
+
+          {/* =================================================
+              BUSCADOR
+              ================================================= */}
+
+          <div className="productos-search">
 
             <input
               type="text"
-              placeholder="Buscar producto por nombre..."
               value={busqueda}
-              onChange={(e) =>
-                setBusqueda(e.target.value)
-              }
+              onChange={(evento) => {
+                setBusqueda(evento.target.value);
+              }}
+              placeholder="Buscar producto por nombre..."
+              aria-label="Buscar producto"
             />
 
           </div>
 
-          {productosFiltrados.length > 0 ? (
+          {/* =================================================
+              TABLA
+              ================================================= */}
 
-            <div className="productos-table-wrapper">
+          <div className="productos-table-wrapper">
 
-              <table className="productos-table">
+            <table className="productos-table">
 
-                <thead>
+              <thead>
+                <tr>
+                  <th>
+                    Producto
+                  </th>
+
+                  <th>
+                    Unidad
+                  </th>
+
+                  <th>
+                    Insumos
+                  </th>
+
+                  <th>
+                    Mano de obra
+                  </th>
+
+                  <th>
+                    Costo total
+                  </th>
+
+                  <th>
+                    Acciones
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                {productosFiltrados.length > 0 ? (
+                  productosFiltrados.map((producto) => (
+
+                    <tr key={producto.id}>
+
+                      <td>
+
+                        <div className="producto-info">
+
+                          <div className="producto-avatar">
+                            ◆
+                          </div>
+
+                          <div>
+                            <strong>
+                              {producto.nombre}
+                            </strong>
+
+                            <span>
+                              {producto.descripcion ||
+                                'Sin descripción'}
+                            </span>
+                          </div>
+
+                        </div>
+
+                      </td>
+
+                      <td>
+                        <span className="badge-unidad">
+                          {producto.unidad}
+                        </span>
+                      </td>
+
+                      <td>
+
+                        {producto.insumos.length > 0 ? (
+                          <span className="badge-insumos">
+                            {producto.insumos.length}{' '}
+                            {producto.insumos.length === 1
+                              ? 'insumo'
+                              : 'insumos'}
+                          </span>
+                        ) : (
+                          <span className="badge-sin-insumos">
+                            Sin insumos
+                          </span>
+                        )}
+
+                      </td>
+
+                      <td>
+                        <span className="precio-mano">
+                          {formatearCOP(
+                            producto.manoObra
+                          )}
+                        </span>
+                      </td>
+
+                      <td>
+                        <span className="precio-total">
+                          {formatearCOP(
+                            producto.manoObra
+                          )}
+                        </span>
+                      </td>
+
+                      <td>
+
+                        <div className="acciones-producto">
+
+                          <button
+                            type="button"
+                            className="btn-editar"
+                            onClick={() => {
+                              abrirEditar(producto);
+                            }}
+                            title="Editar producto"
+                            aria-label={`Editar ${producto.nombre}`}
+                          >
+                            ✎
+                          </button>
+
+                          <button
+                            type="button"
+                            className="btn-eliminar"
+                            onClick={() => {
+                              abrirEliminar(producto);
+                            }}
+                            title="Eliminar producto"
+                            aria-label={`Eliminar ${producto.nombre}`}
+                          >
+                            ×
+                          </button>
+
+                        </div>
+
+                      </td>
+
+                    </tr>
+
+                  ))
+                ) : (
 
                   <tr>
-                    <th>Producto</th>
-                    <th>Unidad</th>
-                    <th>Insumos</th>
-                    <th>
-                      Mano de obra / u.
-                    </th>
-                    <th>
-                      Costo total estimado
-                    </th>
-                    <th>
-                      Acciones
-                    </th>
+                    <td colSpan="6">
+
+                      <div className="productos-vacio">
+                        No se encontraron productos.
+                      </div>
+
+                    </td>
                   </tr>
 
-                </thead>
+                )}
 
-                <tbody>
+              </tbody>
 
-                  {productosFiltrados.map(
-                    (producto) => (
+            </table>
 
-                      <tr
-                        key={producto.id}
-                      >
+          </div>
 
-                        <td>
+          {/* =================================================
+              FOOTER
+              ================================================= */}
 
-                          <div className="producto-info">
+          <div className="productos-footer">
 
-                            <div className="producto-avatar">
-                              ◆
-                            </div>
+            <span>
+              {productosFiltrados.length}{' '}
+              {productosFiltrados.length === 1
+                ? 'producto registrado'
+                : 'productos registrados'}
+            </span>
 
-                            <div>
+            <span>
+              LuckyPay
+            </span>
 
-                              <strong>
-                                {producto.nombre}
-                              </strong>
-
-                              {producto.descripcion && (
-                                <small>
-                                  {producto.descripcion}
-                                </small>
-                              )}
-
-                            </div>
-
-                          </div>
-
-                        </td>
-
-                        <td>
-
-                          <span className="badge-unidad">
-
-                            {iconoUnidad(
-                              producto.unidad
-                            )}
-
-                            {producto.unidad}
-
-                          </span>
-
-                        </td>
-
-                        <td>
-
-                          {producto.insumos.length > 0 ? (
-
-                            <span className="badge-insumos">
-
-                              {producto.insumos.length}{' '}
-
-                              {producto.insumos.length === 1
-                                ? 'insumo'
-                                : 'insumos'}
-
-                            </span>
-
-                          ) : (
-
-                            <span className="badge-sin-insumos">
-                              Sin insumos
-                            </span>
-
-                          )}
-
-                        </td>
-
-                        <td className="precio-mano">
-
-                          {formatearCOP(
-                            producto.manoObra
-                          )}
-
-                        </td>
-
-                        <td className="precio-total">
-
-                          {formatearCOP(
-                            producto.manoObra
-                          )}
-
-                        </td>
-
-                        <td>
-
-                          <div className="acciones-producto">
-
-                            <button
-                              className="btn-editar"
-                              title="Editar producto"
-                              onClick={() =>
-                                abrirEditarProducto(
-                                  producto
-                                )
-                              }
-                            >
-                              ✎
-                            </button>
-
-                            <button
-                              className="btn-eliminar"
-                              title="Eliminar producto"
-                              onClick={() =>
-                                solicitarEliminar(
-                                  producto
-                                )
-                              }
-                            >
-                              🗑
-                            </button>
-
-                          </div>
-
-                        </td>
-
-                      </tr>
-
-                    )
-                  )}
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-          ) : (
-
-            <div className="productos-vacio">
-
-              <div>
-                □
-              </div>
-
-              <h3>
-                No hay productos registrados.
-              </h3>
-
-              <p>
-                {busqueda
-                  ? 'No encontramos productos con esa búsqueda.'
-                  : 'Haz clic en Nuevo producto para comenzar.'}
-              </p>
-
-              {busqueda && (
-                <button
-                  onClick={() =>
-                    setBusqueda('')
-                  }
-                >
-                  Limpiar búsqueda
-                </button>
-              )}
-
-            </div>
-
-          )}
+          </div>
 
         </section>
 
-        <footer className="productos-footer">
-
-          © 2026 <strong>LuckyPay</strong> —
-          Controla tu Negocio, Crece con Confianza
-
-        </footer>
-
       </main>
 
-      {/* =========================
-          MODAL NUEVO / EDITAR
-      ========================= */}
+      {/* ===================================================
+          MODAL CREAR / EDITAR
+          =================================================== */}
 
-      {modalProducto && (
-
+      {modalAbierto && (
         <div
           className="producto-modal-overlay"
-          onClick={cerrarModalProducto}
+          onMouseDown={(evento) => {
+            if (evento.target === evento.currentTarget) {
+              cerrarModal();
+            }
+          }}
         >
 
           <div
-            className="producto-modal grande"
-            onClick={(e) =>
-              e.stopPropagation()
-            }
+            className="producto-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="producto-modal-title"
           >
 
             <div className="producto-modal-header">
 
               <div>
 
-                <span>
-                  {productoEditando
-                    ? 'EDITAR'
-                    : 'NUEVO PRODUCTO'}
-                </span>
+                <h3 id="producto-modal-title">
+                  {productoEditar
+                    ? 'Editar producto'
+                    : 'Nuevo producto'}
+                </h3>
 
-                <h2>
-                  {productoEditando
-                    ? '✎ Editar producto'
-                    : '+ Nuevo producto'}
-                </h2>
+                <p>
+                  Completa la información del producto.
+                </p>
 
               </div>
 
               <button
-                onClick={cerrarModalProducto}
+                type="button"
+                className="producto-modal-close"
+                onClick={cerrarModal}
+                aria-label="Cerrar"
               >
                 ×
               </button>
 
             </div>
 
-            <div className="producto-modal-body">
+            <form
+              className="producto-form"
+              onSubmit={guardarProducto}
+            >
 
-              <div className="form-bloque">
-
-                <h3>
-                  ◆ Información general
-                </h3>
+              <div className="producto-modal-body">
 
                 <div className="campo">
 
-                  <label>
-                    Nombre del producto
+                  <label htmlFor="nombre-producto">
+                    Nombre del producto{' '}
                     <span>*</span>
                   </label>
 
                   <input
+                    id="nombre-producto"
                     type="text"
-                    placeholder="Ej: Silla ergonómica modelo A"
-                    value={nombre}
-                    onChange={(e) =>
-                      setNombre(e.target.value)
-                    }
+                    value={formulario.nombre}
+                    onChange={(evento) => {
+                      cambiarCampo(
+                        'nombre',
+                        evento.target.value
+                      );
+                    }}
+                    placeholder="Ej. Silla ergonómica"
+                    autoFocus
                   />
 
                 </div>
 
+                <br />
+
                 <div className="campo">
 
-                  <label>
+                  <label htmlFor="descripcion-producto">
                     Descripción
                   </label>
 
                   <textarea
-                    rows="3"
+                    id="descripcion-producto"
+                    value={formulario.descripcion}
+                    onChange={(evento) => {
+                      cambiarCampo(
+                        'descripcion',
+                        evento.target.value
+                      );
+                    }}
                     placeholder="Describe brevemente el producto..."
-                    value={descripcion}
-                    onChange={(e) =>
-                      setDescripcion(e.target.value)
-                    }
                   />
 
                 </div>
 
-                <div className="campo campo-mitad">
+                <br />
 
-                  <label>
-                    Unidad de medida
-                    <span>*</span>
-                  </label>
+                <div className="campo-grid">
 
-                  <select
-                    value={unidad}
-                    onChange={(e) =>
-                      setUnidad(e.target.value)
-                    }
-                  >
+                  <div className="campo">
 
-                    <option value="">
-                      — Seleccionar —
-                    </option>
-
-                    <option value="unidad">
+                    <label htmlFor="unidad-producto">
                       Unidad
-                    </option>
+                    </label>
 
-                    <option value="kg">
-                      Kilogramo (kg)
-                    </option>
+                    <select
+                      id="unidad-producto"
+                      value={formulario.unidad}
+                      onChange={(evento) => {
+                        cambiarCampo(
+                          'unidad',
+                          evento.target.value
+                        );
+                      }}
+                    >
+                      <option value="Unidad">
+                        Unidad
+                      </option>
 
-                    <option value="g">
-                      Gramo (g)
-                    </option>
+                      <option value="Docena">
+                        Docena
+                      </option>
 
-                    <option value="litro">
-                      Litro (L)
-                    </option>
+                      <option value="Caja">
+                        Caja
+                      </option>
 
-                    <option value="ml">
-                      Mililitro (mL)
-                    </option>
+                      <option value="Lote">
+                        Lote
+                      </option>
+                    </select>
 
-                    <option value="metro">
-                      Metro (m)
-                    </option>
+                  </div>
 
-                    <option value="caja">
-                      Caja
-                    </option>
+                  <div className="campo">
 
-                    <option value="docena">
-                      Docena
-                    </option>
-
-                  </select>
-
-                </div>
-
-              </div>
-
-              <div className="form-bloque">
-
-                <h3>
-                  ⚒ Mano de obra directa
-                </h3>
-
-                <div className="campo campo-mitad">
-
-                  <label>
-                    Costo de mano de obra por unidad
-                    <span>*</span>
-                  </label>
-
-                  <div className="input-precio">
-
-                    <span>
-                      $
-                    </span>
+                    <label htmlFor="mano-obra">
+                      Mano de obra
+                    </label>
 
                     <input
+                      id="mano-obra"
                       type="number"
                       min="0"
-                      step="0.01"
-                      placeholder="0.00"
-                      value={manoObra}
-                      onChange={(e) =>
-                        setManoObra(
-                          e.target.value
-                        )
-                      }
+                      step="1000"
+                      value={formulario.manoObra}
+                      onChange={(evento) => {
+                        cambiarCampo(
+                          'manoObra',
+                          evento.target.value
+                        );
+                      }}
+                      placeholder="0"
                     />
 
                   </div>
 
                 </div>
 
-              </div>
+                <br />
 
-              <div className="form-bloque">
+                <div className="producto-insumos">
 
-                <div className="insumos-header">
+                  <div className="producto-insumos-header">
 
-                  <h3>
-                    ▤ Insumos del producto
-                  </h3>
+                    <strong>
+                      Insumos utilizados
+                    </strong>
 
-                  <button
-                    onClick={agregarInsumo}
-                  >
-                    + Agregar insumo
-                  </button>
-
-                </div>
-
-                {insumos.length > 0 && (
-
-                  <div className="insumos-cabecera">
-
-                    <span>
-                      Insumo
-                    </span>
-
-                    <span>
-                      Cantidad
-                    </span>
-
-                    <span>
-                      Unidad
-                    </span>
-
-                    <span></span>
+                    <button
+                      type="button"
+                      className="producto-agregar-insumo"
+                      onClick={agregarInsumo}
+                    >
+                      + Agregar insumo
+                    </button>
 
                   </div>
 
-                )}
+                  {formulario.insumos.length === 0 ? (
 
-                <div className="lista-insumos">
+                    <div className="producto-delete-alert">
+                      Este producto todavía no tiene
+                      insumos registrados.
+                    </div>
 
-                  {insumos.map(
-                    (insumo, index) => (
+                  ) : (
+
+                    formulario.insumos.map((insumo) => (
 
                       <div
-                        className="fila-insumo"
-                        key={index}
+                        className="producto-insumo-row"
+                        key={insumo.id}
                       >
 
                         <select
                           value={insumo.nombre}
-                          onChange={(e) =>
+                          onChange={(evento) => {
                             actualizarInsumo(
-                              index,
+                              insumo.id,
                               'nombre',
-                              e.target.value
-                            )
-                          }
+                              evento.target.value
+                            );
+                          }}
                         >
 
                           <option value="">
-                            — Seleccionar insumo —
+                            Seleccionar insumo
                           </option>
 
-                          {insumosDisponibles.map(
-                            (opcion) => (
-
+                          {INSUMOS_DISPONIBLES.map(
+                            (nombreInsumo) => (
                               <option
-                                key={opcion.nombre}
-                                value={opcion.nombre}
+                                key={nombreInsumo}
+                                value={nombreInsumo}
                               >
-                                {opcion.nombre}
+                                {nombreInsumo}
                               </option>
-
                             )
                           )}
 
@@ -1085,170 +1102,36 @@ function Productos() {
 
                         <input
                           type="number"
-                          min="0"
-                          step="0.01"
-                          placeholder="0"
-                          value={
-                            insumo.cantidad
-                          }
-                          onChange={(e) =>
+                          min="1"
+                          value={insumo.cantidad}
+                          onChange={(evento) => {
                             actualizarInsumo(
-                              index,
+                              insumo.id,
                               'cantidad',
-                              e.target.value
-                            )
-                          }
-                        />
-
-                        <input
-                          type="text"
-                          value={
-                            insumo.unidad
-                          }
-                          readOnly
-                          placeholder="Unidad"
+                              evento.target.value
+                            );
+                          }}
+                          aria-label="Cantidad"
                         />
 
                         <button
-                          className="btn-quitar-insumo"
-                          onClick={() =>
-                            eliminarFilaInsumo(
-                              index
-                            )
-                          }
-                          title="Quitar insumo"
+                          type="button"
+                          className="producto-insumo-remove"
+                          onClick={() => {
+                            eliminarInsumo(
+                              insumo.id
+                            );
+                          }}
+                          aria-label="Eliminar insumo"
                         >
                           ×
                         </button>
 
                       </div>
 
-                    )
+                    ))
+
                   )}
-
-                </div>
-
-                {insumos.length === 0 && (
-
-                  <div className="insumos-vacio">
-
-                    <span>
-                      ◈
-                    </span>
-
-                    Aún no has agregado insumos.
-                    Haz clic en
-
-                    <strong>
-                      Agregar insumo
-                    </strong>
-
-                  </div>
-
-                )}
-
-              </div>
-
-            </div>
-
-            <div className="producto-modal-footer">
-
-              <button
-                className="btn-cancelar"
-                onClick={
-                  cerrarModalProducto
-                }
-              >
-                Cancelar
-              </button>
-
-              <button
-                className="btn-guardar"
-                onClick={guardarProducto}
-              >
-                ✓{' '}
-
-                {productoEditando
-                  ? 'Guardar cambios'
-                  : 'Guardar producto'}
-
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      )}
-
-      {/* =========================
-          MODAL ELIMINAR
-      ========================= */}
-
-      {modalEliminar &&
-        productoAEliminar && (
-
-          <div
-            className="producto-modal-overlay"
-            onClick={cancelarEliminar}
-          >
-
-            <div
-              className="producto-modal eliminar-modal"
-              onClick={(e) =>
-                e.stopPropagation()
-              }
-            >
-
-              <div className="producto-modal-header peligro">
-
-                <div>
-
-                  <span>
-                    CONFIRMACIÓN
-                  </span>
-
-                  <h2>
-                    ⚠ Eliminar producto
-                  </h2>
-
-                </div>
-
-                <button
-                  onClick={cancelarEliminar}
-                >
-                  ×
-                </button>
-
-              </div>
-
-              <div className="eliminar-body">
-
-                <div className="alerta-eliminar">
-
-                  <div className="alerta-icono">
-                    !
-                  </div>
-
-                  <div>
-
-                    <p>
-                      Estás a punto de eliminar{' '}
-
-                      <strong>
-                        "{productoAEliminar.nombre}"
-                      </strong>.
-
-                    </p>
-
-                    <span>
-                      Esta acción no se puede deshacer.
-                      Se perderán todos los insumos y
-                      costos asociados al producto.
-                    </span>
-
-                  </div>
 
                 </div>
 
@@ -1257,29 +1140,128 @@ function Productos() {
               <div className="producto-modal-footer">
 
                 <button
-                  className="btn-cancelar"
-                  onClick={cancelarEliminar}
+                  type="button"
+                  className="producto-btn-cancelar"
+                  onClick={cerrarModal}
                 >
                   Cancelar
                 </button>
 
                 <button
-                  className="btn-confirmar-eliminar"
-                  onClick={confirmarEliminar}
+                  type="submit"
+                  className="producto-btn-guardar"
                 >
-                  🗑 Sí, eliminar
+                  {productoEditar
+                    ? 'Guardar cambios'
+                    : 'Crear producto'}
                 </button>
 
               </div>
+
+            </form>
+
+          </div>
+
+        </div>
+      )}
+
+      {/* ===================================================
+          MODAL ELIMINAR
+          =================================================== */}
+
+      {modalEliminar && productoEliminar && (
+        <div
+          className="producto-modal-overlay"
+          onMouseDown={(evento) => {
+            if (evento.target === evento.currentTarget) {
+              cerrarEliminar();
+            }
+          }}
+        >
+
+          <div
+            className="producto-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="eliminar-producto-title"
+          >
+
+            <div className="producto-modal-header peligro">
+
+              <div>
+
+                <h3 id="eliminar-producto-title">
+                  Eliminar producto
+                </h3>
+
+                <p>
+                  Esta acción eliminará el registro.
+                </p>
+
+              </div>
+
+              <button
+                type="button"
+                className="producto-modal-close"
+                onClick={cerrarEliminar}
+                aria-label="Cerrar"
+              >
+                ×
+              </button>
+
+            </div>
+
+            <div className="producto-modal-body">
+
+              <div className="producto-delete-confirm">
+
+                ¿Estás seguro de que deseas eliminar
+                <br />
+
+                <strong>
+                  {productoEliminar.nombre}
+                </strong>
+
+                ?
+
+              </div>
+
+              <br />
+
+              <div className="producto-delete-alert">
+                Esta acción no se puede deshacer.
+              </div>
+
+            </div>
+
+            <div className="producto-modal-footer">
+
+              <button
+                type="button"
+                className="producto-btn-cancelar"
+                onClick={cerrarEliminar}
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                className="producto-btn-eliminar-confirmar"
+                onClick={confirmarEliminar}
+              >
+                Eliminar producto
+              </button>
 
             </div>
 
           </div>
 
-        )}
+        </div>
+      )}
 
     </div>
   );
 }
 
 export default Productos;
+

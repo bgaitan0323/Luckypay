@@ -1,10 +1,18 @@
-/* ================================
-   LUCKYPAY - COSTOS
-   Tema negro + dorado
-================================ */
 
 * {
   box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: #0b0b0b;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .costos-page {
@@ -14,89 +22,113 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ================================
+/* =========================================================
    NAVBAR
-================================ */
+========================================================= */
 
 .costos-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
   height: 68px;
-  background: #111111;
-  border-bottom: 1px solid #2b2b2b;
+  padding: 0 28px;
+
+  background: #0d0d0d;
+  border-bottom: 1px solid #252525;
 
   display: flex;
   align-items: center;
-
-  padding: 0 20px;
-
-  position: sticky;
-  top: 0;
+  justify-content: space-between;
 
   z-index: 200;
 }
 
-/* ================================
-   BOTÓN TRES RAYAS
-================================ */
+.costos-navbar-left {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* =========================================================
+   BOTÓN MENÚ
+========================================================= */
 
 .costos-menu-btn {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
 
-  border: 1px solid #333;
-  border-radius: 10px;
+  padding: 0;
+  margin-right: 16px;
 
-  background: #171717;
+  flex-shrink: 0;
+
+  border: 1px solid #303030;
+  border-radius: 8px;
+
+  background: #111111;
+  color: #d4af37;
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 
   gap: 5px;
 
   cursor: pointer;
 
-  margin-right: 18px;
-
-  transition: 0.2s;
+  transition: 0.2s ease;
 }
 
-.costos-menu-btn:hover {
+.costos-menu-btn:hover,
+.costos-menu-btn.active {
+  background: #191919;
   border-color: #d4af37;
-  background: #1d1d1d;
 }
 
-.costos-menu-btn span {
-  width: 20px;
+.costos-menu-btn span:not(.costos-menu-x) {
+  display: block;
+
+  width: 18px;
   height: 2px;
 
   background: #d4af37;
 
-  border-radius: 5px;
-
-  transition: 0.25s;
+  border-radius: 3px;
 }
 
-.costos-menu-btn.active span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
+.costos-menu-x {
+  display: flex !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  align-items: center;
+  justify-content: center;
+
+  background: transparent !important;
+
+  color: #d4af37;
+
+  font-size: 25px;
+  font-weight: 300;
+
+  line-height: 1;
 }
 
-.costos-menu-btn.active span:nth-child(2) {
-  opacity: 0;
-}
-
-.costos-menu-btn.active span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
-}
-
-/* ================================
-   BRAND
-================================ */
+/* =========================================================
+   MARCA
+========================================================= */
 
 .costos-brand {
   display: flex;
   align-items: center;
+
   gap: 11px;
+
+  min-width: 0;
 }
 
 .costos-brand img {
@@ -105,6 +137,8 @@
 
   object-fit: contain;
   border-radius: 50%;
+
+  flex-shrink: 0;
 }
 
 .costos-brand strong {
@@ -113,32 +147,38 @@
   color: #d4af37;
 
   font-size: 19px;
+  font-weight: 700;
+
   letter-spacing: 0.3px;
+
+  white-space: nowrap;
 }
 
 .costos-brand small {
   display: block;
 
-  color: #8f8f8f;
+  margin-top: 2px;
+
+  color: #777;
 
   font-size: 11px;
 
-  margin-top: 2px;
+  white-space: nowrap;
 }
 
-/* ================================
-   BIENVENIDO / USUARIO
-================================ */
+/* =========================================================
+   USUARIO
+========================================================= */
 
 .costos-welcome {
   margin-left: auto;
+
+  height: 100%;
 
   display: flex;
   align-items: center;
 
   gap: 12px;
-
-  height: 100%;
 }
 
 .costos-welcome-text {
@@ -152,8 +192,6 @@
 }
 
 .costos-welcome-text strong {
-  display: block;
-
   color: #f1f1f1;
 
   font-size: 12px;
@@ -163,24 +201,17 @@
 }
 
 .costos-welcome-text small {
-  display: block;
+  margin-top: 3px;
 
   color: #777;
 
   font-size: 10px;
 
-  margin-top: 3px;
-
   white-space: nowrap;
 }
 
-/* ================================
-   BOTÓN SALIR
-================================ */
-
 .costos-logout-btn {
   height: 32px;
-
   min-width: 48px;
 
   padding: 0 12px;
@@ -188,7 +219,6 @@
   background: #111111;
 
   border: 1px solid #343434;
-
   border-radius: 6px;
 
   color: #cfcfcf;
@@ -202,143 +232,148 @@
 
 .costos-logout-btn:hover {
   color: #d4af37;
-
   border-color: #d4af37;
-
   background: #191919;
 }
 
-/* ================================
+/* =========================================================
    OVERLAY
-================================ */
+   TRANSPARENTE COMO EL PANEL
+========================================================= */
 
 .costos-menu-overlay {
   position: fixed;
   inset: 0;
 
-  background: rgba(0, 0, 0, 0.68);
+  background: transparent;
 
   z-index: 150;
 }
 
-/* ================================
+/* =========================================================
    SIDEBAR
-================================ */
+========================================================= */
 
 .costos-sidebar {
   position: fixed;
 
   top: 68px;
   left: 0;
+  bottom: 0;
 
   width: 275px;
-  height: calc(100vh - 68px);
 
-  background: #111111;
+  background: #101010;
 
-  border-right: 1px solid #292929;
+  border-right: 1px solid #303030;
 
   z-index: 180;
 
+  display: flex;
+  flex-direction: column;
+
   transform: translateX(-100%);
 
-  transition: transform 0.25s ease;
+  transition: transform 0.22s ease;
 
-  overflow-y: auto;
+  box-shadow: 15px 0 40px rgba(0, 0, 0, 0.35);
 
-  padding-bottom: 20px;
+  overflow: hidden;
 }
 
 .costos-sidebar.open {
   transform: translateX(0);
 }
 
-.costos-sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+/* =========================================================
+   HEADER SIDEBAR
+========================================================= */
 
-  padding: 22px 20px;
+.costos-sidebar-header {
+  padding: 22px 20px 18px;
 
   border-bottom: 1px solid #292929;
+
+  flex-shrink: 0;
 }
 
-.costos-sidebar-header strong {
+.costos-sidebar-title {
   display: block;
 
   color: #d4af37;
 
-  font-size: 17px;
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
 }
 
-.costos-sidebar-header span {
-  display: block;
+/* =========================================================
+   NAVEGACIÓN SIDEBAR
+========================================================= */
 
-  color: #777;
+.costos-sidebar-nav {
+  flex: 1;
+  min-height: 0;
 
-  font-size: 11px;
+  padding: 15px 12px;
 
-  margin-top: 3px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-.costos-sidebar-close {
-  width: 32px;
-  height: 32px;
-
-  border: none;
-
-  border-radius: 8px;
-
-  background: #1d1d1d;
-
-  color: #aaa;
-
-  font-size: 22px;
-
-  cursor: pointer;
+.costos-sidebar-nav::-webkit-scrollbar {
+  width: 7px;
 }
 
-.costos-sidebar-close:hover {
-  color: #d4af37;
+.costos-sidebar-nav::-webkit-scrollbar-track {
+  background: #0e0e0e;
 }
 
-.costos-sidebar nav {
-  padding: 14px 12px;
+.costos-sidebar-nav::-webkit-scrollbar-thumb {
+  background: #444;
+
+  border-radius: 10px;
 }
+
+.costos-sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}
+
+/* =========================================================
+   ITEMS DEL MENÚ
+========================================================= */
 
 .costos-sidebar-item {
   width: 100%;
-  height: 45px;
-
-  border: none;
-
-  background: transparent;
-
-  color: #aaa;
-
-  border-radius: 9px;
+  min-height: 43px;
 
   display: flex;
   align-items: center;
 
   gap: 13px;
 
-  padding: 0 13px;
+  padding: 10px 13px;
+  margin-bottom: 4px;
 
-  margin-bottom: 5px;
+  border: 0;
+  border-radius: 7px;
 
-  cursor: pointer;
+  background: transparent;
+
+  color: #aaa;
 
   text-align: left;
 
-  font-size: 14px;
+  font-size: 13px;
 
-  transition: 0.2s;
+  cursor: pointer;
+
+  transition: 0.2s ease;
 }
 
 .costos-sidebar-item:hover {
   background: #1b1b1b;
-
   color: #fff;
 }
 
@@ -347,52 +382,112 @@
 
   color: #d4af37;
 
-  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-left: 3px solid #d4af37;
+
+  padding-left: 10px;
 }
 
+/* =========================================================
+   ICONOS
+========================================================= */
+
 .sidebar-icon {
-  width: 23px;
+  width: 22px;
+  min-width: 22px;
 
   text-align: center;
 
-  font-size: 16px;
+  color: #777;
 
+  font-size: 14px;
+}
+
+.costos-sidebar-item:hover .sidebar-icon,
+.costos-sidebar-item.active .sidebar-icon {
   color: #d4af37;
 }
+
+/* =========================================================
+   SEPARADOR
+========================================================= */
 
 .costos-sidebar-separator {
   height: 1px;
 
   background: #292929;
 
-  margin: 13px 5px;
+  margin: 14px 8px;
 }
 
-.costos-sidebar-item.logout {
-  color: #c8c8c8;
+/* =========================================================
+   CERRAR SESIÓN
+========================================================= */
+
+.costos-sidebar-bottom {
+  padding: 14px 12px;
+
+  border-top: 1px solid #292929;
+
+  flex-shrink: 0;
+
+  background: #101010;
 }
 
-.costos-sidebar-item.logout:hover {
+.costos-sidebar-logout {
+  width: 100%;
+  height: 43px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 0 13px;
+
+  background: transparent;
+
+  border: 1px solid #303030;
+  border-radius: 7px;
+
+  color: #999;
+
+  cursor: pointer;
+
+  font-size: 13px;
+
+  text-align: left;
+
+  transition: 0.2s ease;
+}
+
+.costos-sidebar-logout:hover {
   color: #d4af37;
+
+  border-color: #d4af37;
+
+  background: #151515;
 }
 
-/* ================================
-   MAIN
-================================ */
+/* =========================================================
+   CONTENIDO PRINCIPAL
+========================================================= */
 
 .costos-main {
   width: min(1380px, calc(100% - 48px));
 
   margin: 0 auto;
 
-  padding: 35px 0 25px;
+  padding: 103px 0 25px;
 }
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
 
 .costos-heading {
   display: flex;
 
   justify-content: space-between;
-
   align-items: flex-end;
 
   gap: 25px;
@@ -404,18 +499,17 @@
   color: #d4af37;
 
   font-size: 11px;
-
   font-weight: 700;
 
   letter-spacing: 1.7px;
 }
 
 .costos-heading h1 {
-  margin: 7px 0 7px;
-
-  font-size: 31px;
+  margin: 7px 0;
 
   color: #fff;
+
+  font-size: 31px;
 }
 
 .costos-heading p {
@@ -427,8 +521,6 @@
 }
 
 .costos-fecha {
-  text-align: right;
-
   padding: 13px 17px;
 
   background: #111;
@@ -436,18 +528,20 @@
   border: 1px solid #292929;
 
   border-radius: 10px;
+
+  text-align: right;
 }
 
 .costos-fecha span {
   display: block;
+
+  margin-bottom: 4px;
 
   color: #777;
 
   font-size: 10px;
 
   text-transform: uppercase;
-
-  margin-bottom: 4px;
 }
 
 .costos-fecha strong {
@@ -456,27 +550,25 @@
   font-size: 12px;
 }
 
-/* ================================
-   CARD
-================================ */
+/* =========================================================
+   CARDS
+========================================================= */
 
 .costos-card {
+  padding: 23px;
+  margin-bottom: 20px;
+
   background: #111111;
 
   border: 1px solid #292929;
 
   border-radius: 13px;
-
-  padding: 23px;
-
-  margin-bottom: 20px;
 }
 
 .costos-card-header {
   display: flex;
 
   align-items: center;
-
   justify-content: space-between;
 
   gap: 15px;
@@ -488,7 +580,6 @@
   color: #d4af37;
 
   font-size: 10px;
-
   font-weight: 700;
 
   letter-spacing: 1.5px;
@@ -497,28 +588,28 @@
 .costos-card-header h2 {
   margin: 5px 0 0;
 
-  font-size: 19px;
-
   color: #fff;
+
+  font-size: 19px;
 }
 
 .costos-product-badge {
   padding: 7px 11px;
 
-  border-radius: 7px;
-
   background: rgba(212, 175, 55, 0.1);
 
-  color: #d4af37;
-
   border: 1px solid rgba(212, 175, 55, 0.2);
+
+  border-radius: 7px;
+
+  color: #d4af37;
 
   font-size: 11px;
 }
 
-/* ================================
+/* =========================================================
    SELECTOR
-================================ */
+========================================================= */
 
 .costos-selector-grid {
   display: grid;
@@ -531,11 +622,11 @@
 .costos-field label {
   display: block;
 
+  margin-bottom: 8px;
+
   color: #999;
 
   font-size: 12px;
-
-  margin-bottom: 8px;
 }
 
 .costos-field select,
@@ -545,11 +636,11 @@
 
   padding: 0 13px;
 
-  border-radius: 8px;
+  background: #191919;
 
   border: 1px solid #343434;
 
-  background: #191919;
+  border-radius: 8px;
 
   color: #fff;
 
@@ -563,9 +654,9 @@
   border-color: #d4af37;
 }
 
-/* ================================
-   SUMMARY
-================================ */
+/* =========================================================
+   RESUMEN
+========================================================= */
 
 .costos-summary-grid {
   display: grid;
@@ -580,29 +671,24 @@
 .costos-summary-card {
   min-height: 105px;
 
+  padding: 17px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
   background: #111;
 
   border: 1px solid #292929;
 
   border-radius: 12px;
-
-  padding: 17px;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 13px;
 }
 
 .costos-summary-card.highlight {
-  border-color: rgba(212, 175, 55, 0.45);
+  background: linear-gradient(145deg, #17140b, #111);
 
-  background: linear-gradient(
-    145deg,
-    #17140b,
-    #111
-  );
+  border-color: rgba(212, 175, 55, 0.45);
 }
 
 .costos-summary-icon {
@@ -611,16 +697,15 @@
 
   flex-shrink: 0;
 
-  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   background: rgba(212, 175, 55, 0.1);
 
   border: 1px solid rgba(212, 175, 55, 0.18);
 
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
+  border-radius: 10px;
 
   color: #d4af37;
 
@@ -630,11 +715,11 @@
 .costos-summary-card span {
   display: block;
 
+  margin-bottom: 5px;
+
   color: #777;
 
   font-size: 11px;
-
-  margin-bottom: 5px;
 }
 
 .costos-summary-card strong {
@@ -643,9 +728,9 @@
   font-size: 17px;
 }
 
-/* ================================
-   TABLE
-================================ */
+/* =========================================================
+   TABLA
+========================================================= */
 
 .costos-table-wrapper {
   width: 100%;
@@ -656,15 +741,15 @@
 .costos-table {
   width: 100%;
 
-  border-collapse: collapse;
-
   min-width: 680px;
+
+  border-collapse: collapse;
 }
 
 .costos-table th {
-  text-align: left;
-
   padding: 12px 13px;
+
+  text-align: left;
 
   color: #777;
 
@@ -680,11 +765,11 @@
 .costos-table td {
   padding: 14px 13px;
 
-  border-bottom: 1px solid #222;
-
   color: #aaa;
 
   font-size: 13px;
+
+  border-bottom: 1px solid #222;
 }
 
 .costos-table tbody tr:hover {
@@ -693,7 +778,6 @@
 
 .costos-concepto {
   display: flex;
-
   align-items: center;
 
   gap: 11px;
@@ -703,16 +787,15 @@
   width: 30px;
   height: 30px;
 
-  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   background: rgba(212, 175, 55, 0.08);
 
+  border-radius: 7px;
+
   color: #d4af37;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
 
   font-size: 11px;
 }
@@ -728,11 +811,11 @@
 .costos-concepto small {
   display: block;
 
+  margin-top: 3px;
+
   color: #666;
 
   font-size: 10px;
-
-  margin-top: 3px;
 }
 
 .costos-total-cell {
@@ -745,26 +828,26 @@
   background: rgba(255, 255, 255, 0.015);
 }
 
-/* ================================
+/* =========================================================
    TOTAL
-================================ */
+========================================================= */
 
 .costos-total-box {
   margin-top: 18px;
 
   padding: 16px 18px;
 
-  border-radius: 10px;
-
-  border: 1px solid #292929;
-
-  background: #0d0d0d;
-
   display: flex;
 
   justify-content: flex-end;
 
   gap: 45px;
+
+  background: #0d0d0d;
+
+  border: 1px solid #292929;
+
+  border-radius: 10px;
 }
 
 .costos-total-box div {
@@ -774,11 +857,11 @@
 .costos-total-box span {
   display: block;
 
+  margin-bottom: 5px;
+
   color: #777;
 
   font-size: 11px;
-
-  margin-bottom: 5px;
 }
 
 .costos-total-box strong {
@@ -787,9 +870,9 @@
   font-size: 19px;
 }
 
-/* ================================
-   INFO
-================================ */
+/* =========================================================
+   INFORMACIÓN
+========================================================= */
 
 .costos-info-grid {
   display: grid;
@@ -819,16 +902,15 @@
 
   flex-shrink: 0;
 
-  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   border: 1px solid rgba(212, 175, 55, 0.3);
 
+  border-radius: 50%;
+
   color: #d4af37;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
 
   font-weight: bold;
 }
@@ -851,9 +933,9 @@
   line-height: 1.55;
 }
 
-/* ================================
+/* =========================================================
    FOOTER
-================================ */
+========================================================= */
 
 .costos-footer {
   display: flex;
@@ -867,55 +949,47 @@
   font-size: 11px;
 }
 
-/* ================================
+/* =========================================================
    RESPONSIVE
-================================ */
+========================================================= */
 
 @media (max-width: 1050px) {
-
   .costos-summary-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
 }
 
 @media (max-width: 760px) {
-
   .costos-navbar {
     padding: 0 15px;
   }
 
-  .costos-welcome {
-    gap: 8px;
-  }
-
-  .costos-welcome-text strong {
-    font-size: 11px;
-  }
-
-  .costos-welcome-text small {
-    font-size: 9px;
-  }
-
-  .costos-logout-btn {
-    height: 30px;
-    padding: 0 10px;
+  .costos-brand strong {
+    font-size: 17px;
   }
 
   .costos-brand small {
     display: none;
   }
 
+  .costos-welcome-text {
+    display: none;
+  }
+
   .costos-main {
     width: calc(100% - 28px);
 
-    padding-top: 25px;
+    padding-top: 93px;
   }
 
   .costos-heading {
     align-items: flex-start;
 
     flex-direction: column;
+  }
+
+  .costos-heading h1 {
+    font-size: 27px;
   }
 
   .costos-fecha {
@@ -949,29 +1023,28 @@
 
     gap: 7px;
   }
-
 }
 
 @media (max-width: 480px) {
-
-  .costos-brand strong {
-    font-size: 17px;
+  .costos-navbar {
+    padding: 0 12px;
   }
 
-  .costos-heading h1 {
-    font-size: 25px;
+  .costos-menu-btn {
+    margin-right: 10px;
+  }
+
+  .costos-brand img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .costos-sidebar {
+    width: 275px;
+    max-width: 88vw;
   }
 
   .costos-card {
     padding: 16px;
   }
-
-  .costos-sidebar {
-    width: 85%;
-  }
-
-  .costos-welcome-text {
-    display: none;
-  }
-
 }

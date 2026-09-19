@@ -1,5 +1,6 @@
 /* =========================================================
    LUCKYPAY — USUARIOS Y ROLES
+   NEGRO + DORADO
    ========================================================= */
 
 * {
@@ -18,8 +19,11 @@
    ========================================================= */
 
 .usuarios-navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+
   z-index: 1000;
 
   width: 100%;
@@ -30,15 +34,17 @@
 
   padding: 0 28px;
 
-  background: #111;
-  border-bottom: 1px solid #292929;
+  background: #0d0d0d;
+  border-bottom: 1px solid #252525;
 }
 
-/* HAMBURGUESA */
+/* =========================================================
+   BOTÓN MENÚ
+   ========================================================= */
 
 .usuarios-menu {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
 
   display: flex;
   flex-direction: column;
@@ -46,33 +52,43 @@
   justify-content: center;
 
   gap: 5px;
+
   padding: 0;
 
-  background: transparent;
+  background: #111;
 
-  border: 1px solid #333;
+  border: 1px solid #303030;
   border-radius: 8px;
 
   cursor: pointer;
+
+  transition: 0.2s;
 }
 
 .usuarios-menu span {
-  display: block;
-
-  width: 20px;
+  width: 18px;
   height: 2px;
+
+  display: block;
 
   background: #d4af37;
 
-  border-radius: 2px;
+  border-radius: 3px;
 
   transition: 0.25s;
 }
 
-.usuarios-menu:hover {
-  background: #1c1c1c;
+.usuarios-menu:hover,
+.usuarios-menu.activo {
+  background: #191919;
   border-color: #d4af37;
 }
+
+/*
+   El JS actual usa las 3 barras incluso cuando
+   el menú está abierto, así que mantenemos la X
+   mediante CSS.
+*/
 
 .usuarios-menu.activo span:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
@@ -122,9 +138,9 @@
    ========================================================= */
 
 .usuarios-welcome {
-  margin-left: auto;
-
   height: 100%;
+
+  margin-left: auto;
 
   display: flex;
   align-items: center;
@@ -152,7 +168,7 @@
 .usuarios-user-info span {
   margin-top: 3px;
 
-  color: #a5a5a5;
+  color: #707070;
 
   font-size: 12px;
 }
@@ -192,7 +208,11 @@
 
   z-index: 1090;
 
-  background: rgba(0, 0, 0, 0.55);
+  /*
+    Transparente como Costos y Meta de Ventas.
+    El usuario pidió que el menú no oscurezca la página.
+  */
+  background: transparent;
 }
 
 /* =========================================================
@@ -210,13 +230,18 @@
 
   width: 275px;
 
-  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
 
-  background: #111;
+  padding: 0;
 
-  border-right: 1px solid #292929;
+  background: #101010;
 
-  overflow-y: auto;
+  border-right: 1px solid #303030;
+
+  box-shadow: 15px 0 40px rgba(0, 0, 0, 0.35);
+
+  overflow: hidden;
 
   transform: translateX(-100%);
 
@@ -227,18 +252,20 @@
   transform: translateX(0);
 }
 
-/* CABECERA SIDEBAR */
+/* =========================================================
+   CABECERA SIDEBAR
+   ========================================================= */
 
 .usuarios-sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 4px 8px 18px;
-
-  margin-bottom: 12px;
+  padding: 22px 20px 18px;
 
   border-bottom: 1px solid #292929;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  flex-shrink: 0;
 }
 
 .usuarios-sidebar-header div {
@@ -249,61 +276,58 @@
 .usuarios-sidebar-header strong {
   color: #d4af37;
 
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 700;
+
+  letter-spacing: 1.5px;
+
+  text-transform: uppercase;
 }
 
 .usuarios-sidebar-header small {
-  margin-top: 3px;
-
-  color: #777;
-
-  font-size: 11px;
+  display: none;
 }
 
+/* Ocultamos el X interno */
 .usuarios-sidebar-close {
-  width: 30px;
-  height: 30px;
-
-  background: transparent;
-
-  border: 1px solid #333;
-  border-radius: 6px;
-
-  color: #aaa;
-
-  font-size: 20px;
-
-  cursor: pointer;
+  display: none !important;
 }
 
-.usuarios-sidebar-close:hover {
-  color: #fff;
-  border-color: #d4af37;
-}
+/* =========================================================
+   NAVEGACIÓN SIDEBAR
+   ========================================================= */
 
-/* ITEMS */
+.usuarios-sidebar-nav {
+  flex: 1;
+
+  min-height: 0;
+
+  padding: 12px;
+
+  overflow-y: auto;
+}
 
 .usuarios-sidebar-item {
   width: 100%;
-  min-height: 44px;
+  min-height: 43px;
 
   display: flex;
   align-items: center;
 
-  gap: 12px;
+  gap: 13px;
 
-  padding: 0 13px;
-  margin-bottom: 5px;
+  padding: 10px 13px;
+
+  margin-bottom: 3px;
 
   background: transparent;
 
-  border: 1px solid transparent;
+  border: 0;
   border-radius: 7px;
 
-  color: #bdbdbd;
+  color: #aaa;
 
-  font-size: 14px;
+  font-size: 13px;
 
   text-align: left;
 
@@ -319,13 +343,16 @@
   align-items: center;
   justify-content: center;
 
-  color: #999;
+  flex-shrink: 0;
 
-  font-size: 17px;
+  color: #777;
+
+  font-size: 15px;
 }
 
 .usuarios-sidebar-item:hover {
   background: #1b1b1b;
+
   color: #fff;
 }
 
@@ -336,40 +363,68 @@
 .usuarios-sidebar-item.active {
   background: rgba(212, 175, 55, 0.12);
 
-  border-color: rgba(212, 175, 55, 0.3);
-
   color: #d4af37;
+
+  border-left: 3px solid #d4af37;
+
+  padding-left: 10px;
 }
 
 .usuarios-sidebar-item.active > span:first-child {
   color: #d4af37;
 }
 
-/* SEPARADOR */
+/* =========================================================
+   SEPARADORES
+   ========================================================= */
 
 .usuarios-sidebar-separator {
-  width: calc(100% - 16px);
-  height: 1px;
-
-  margin: 16px 8px;
-
-  background: #292929;
-}
-
-/* LOGOUT */
-
-.usuarios-sidebar-item.logout {
-  color: #aaa;
-}
-
-.usuarios-sidebar-item.logout:hover {
-  color: #e57373;
-
-  background: rgba(180, 60, 60, 0.08);
+  display: none !important;
 }
 
 /* =========================================================
-   CONTENIDO
+   LOGOUT SIDEBAR
+   ========================================================= */
+
+.usuarios-sidebar-item.logout {
+  color: #999;
+
+  border: 1px solid #303030;
+
+  margin: 0;
+}
+
+.usuarios-sidebar-item.logout:hover {
+  color: #d4af37;
+
+  background: transparent;
+
+  border-color: #d4af37;
+}
+
+/* =========================================================
+   CONTENEDOR INFERIOR DEL SIDEBAR
+   ========================================================= */
+
+.usuarios-sidebar-bottom {
+  padding: 14px 12px;
+
+  border-top: 1px solid #292929;
+
+  flex-shrink: 0;
+}
+
+/* Como el JS actual no usa sidebar-bottom,
+   hacemos que el último logout conserve apariencia correcta. */
+
+.usuarios-sidebar > .usuarios-sidebar-item.logout {
+  margin: 14px 12px;
+
+  width: calc(100% - 24px);
+}
+
+/* =========================================================
+   CONTENIDO PRINCIPAL
    ========================================================= */
 
 .usuarios-main {
@@ -378,10 +433,12 @@
 
   margin: 0 auto;
 
-  padding: 42px 42px 30px;
+  padding: 110px 42px 30px;
 }
 
-/* ENCABEZADO */
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
 
 .usuarios-heading {
   display: flex;
@@ -423,7 +480,9 @@
   font-size: 14px;
 }
 
-/* BOTÓN NUEVO */
+/* =========================================================
+   BOTÓN NUEVO
+   ========================================================= */
 
 .usuarios-add-btn {
   height: 42px;
@@ -480,6 +539,12 @@
   border: 1px solid #292929;
 
   border-radius: 10px;
+
+  transition: 0.2s;
+}
+
+.usuarios-stat-card:hover {
+  border-color: #3a3a3a;
 }
 
 .usuarios-stat-icon {
@@ -491,6 +556,8 @@
   justify-content: center;
 
   background: rgba(212, 175, 55, 0.1);
+
+  border: 1px solid rgba(212, 175, 55, 0.15);
 
   border-radius: 8px;
 
@@ -560,7 +627,9 @@
   font-size: 12px;
 }
 
-/* BUSCADOR */
+/* =========================================================
+   BUSCADOR
+   ========================================================= */
 
 .usuarios-search {
   width: 260px;
@@ -576,7 +645,14 @@
   background: #0e0e0e;
 
   border: 1px solid #303030;
+
   border-radius: 7px;
+
+  transition: 0.2s;
+}
+
+.usuarios-search:focus-within {
+  border-color: #d4af37;
 }
 
 .usuarios-search > span {
@@ -647,11 +723,17 @@
   font-size: 12px;
 }
 
+.usuarios-table tbody tr {
+  transition: 0.2s;
+}
+
 .usuarios-table tbody tr:hover {
   background: #171717;
 }
 
-/* USUARIO */
+/* =========================================================
+   INFORMACIÓN DEL USUARIO
+   ========================================================= */
 
 .usuario-info {
   display: flex;
@@ -688,7 +770,9 @@
   font-size: 12px;
 }
 
-/* ROL */
+/* =========================================================
+   ROL
+   ========================================================= */
 
 .usuario-rol {
   display: inline-block;
@@ -705,15 +789,21 @@
   background: rgba(212, 175, 55, 0.12);
 
   color: #d4af37;
+
+  border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .usuario-rol.empleado {
   background: #202020;
 
-  color: #999;
+  color: #aaa;
+
+  border: 1px solid #303030;
 }
 
-/* ESTADO */
+/* =========================================================
+   ESTADO
+   ========================================================= */
 
 .usuario-estado {
   display: inline-flex;
@@ -759,7 +849,9 @@
   background: #555;
 }
 
-/* ACCIONES */
+/* =========================================================
+   ACCIONES
+   ========================================================= */
 
 .usuario-actions {
   display: flex;
@@ -780,6 +872,7 @@
   background: transparent;
 
   border: 1px solid #303030;
+
   border-radius: 6px;
 
   cursor: pointer;
@@ -806,14 +899,16 @@
 }
 
 .usuario-delete:hover {
-  color: #e57373;
+  color: #d4af37;
 
-  border-color: #7a3838;
+  border-color: #d4af37;
 
-  background: rgba(180, 60, 60, 0.08);
+  background: rgba(212, 175, 55, 0.08);
 }
 
-/* VACÍO */
+/* =========================================================
+   VACÍO
+   ========================================================= */
 
 .usuarios-empty {
   height: 120px !important;
@@ -882,6 +977,7 @@
   background: transparent;
 
   border: 1px solid #333;
+
   border-radius: 6px;
 
   color: #aaa;
@@ -889,14 +985,19 @@
   font-size: 20px;
 
   cursor: pointer;
+
+  transition: 0.2s;
 }
 
 .usuarios-modal-close:hover {
-  color: #fff;
+  color: #d4af37;
+
   border-color: #d4af37;
 }
 
-/* FORMULARIO */
+/* =========================================================
+   FORMULARIO
+   ========================================================= */
 
 .usuarios-form-group {
   margin-bottom: 17px;
@@ -922,6 +1023,7 @@
   background: #0e0e0e;
 
   border: 1px solid #303030;
+
   border-radius: 7px;
 
   outline: none;
@@ -929,11 +1031,15 @@
   color: #eee;
 
   font-size: 13px;
+
+  transition: 0.2s;
 }
 
 .usuarios-form-group input:focus,
 .usuarios-form-group select:focus {
   border-color: #d4af37;
+
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.08);
 }
 
 .usuarios-form-group input::placeholder {
@@ -948,7 +1054,9 @@
   gap: 14px;
 }
 
-/* ACCIONES MODAL */
+/* =========================================================
+   ACCIONES MODAL
+   ========================================================= */
 
 .usuarios-modal-actions {
   display: flex;
@@ -975,6 +1083,8 @@
   font-weight: 600;
 
   cursor: pointer;
+
+  transition: 0.2s;
 }
 
 .usuarios-cancel-btn {
@@ -987,6 +1097,7 @@
 
 .usuarios-cancel-btn:hover {
   color: #fff;
+
   border-color: #555;
 }
 
@@ -1028,16 +1139,18 @@
 
 @media (max-width: 800px) {
   .usuarios-main {
-    padding: 30px 20px;
+    padding: 100px 20px 30px;
   }
 
   .usuarios-heading {
     align-items: flex-start;
+
     flex-direction: column;
   }
 
   .usuarios-card-header {
     align-items: flex-start;
+
     flex-direction: column;
   }
 
@@ -1053,6 +1166,7 @@
 
   .usuarios-brand {
     min-width: auto;
+
     margin-left: 12px;
   }
 
@@ -1079,5 +1193,9 @@
   .usuarios-table th,
   .usuarios-table td {
     padding: 0 12px;
+  }
+
+  .usuarios-sidebar {
+    width: 275px;
   }
 }
