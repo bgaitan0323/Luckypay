@@ -367,4 +367,383 @@
   background: #1b1b1b;
   color: #fff;
 }
+/* =====================================================
+   MODAL NUEVO / EDITAR INSUMO
+   ===================================================== */
 
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(3px);
+}
+
+/* CONTENEDOR DEL MODAL */
+
+.insumo-modal {
+  width: min(620px, 100%);
+  max-height: calc(100vh - 48px);
+
+  overflow-y: auto;
+
+  background: #111111;
+  border: 1px solid #2c2c2c;
+  border-radius: 14px;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(212, 175, 55, 0.04);
+
+  color: #ffffff;
+
+  animation: insumoModalEntrada 0.2s ease-out;
+}
+
+@keyframes insumoModalEntrada {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =====================================================
+   CABECERA
+   ===================================================== */
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 22px 24px 18px;
+
+  border-bottom: 1px solid #292929;
+}
+
+.modal-header > div {
+  min-width: 0;
+}
+
+.modal-header .insumos-eyebrow {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #d4af37;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.modal-header h2 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* BOTÓN X */
+
+.modal-close {
+  width: 36px;
+  height: 36px;
+
+  flex: 0 0 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 20px;
+
+  border: 1px solid #303030;
+  border-radius: 7px;
+
+  background: #171717;
+  color: #9a9a9a;
+
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.modal-close:hover {
+  background: #1d1d1d;
+  border-color: #d4af37;
+  color: #d4af37;
+}
+
+/* =====================================================
+   FORMULARIO
+   ===================================================== */
+
+.insumo-modal form {
+  padding: 24px;
+}
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 18px 20px;
+}
+
+.form-group {
+  min-width: 0;
+}
+
+.form-group.full {
+  grid-column: 1 / -1;
+}
+
+/* =====================================================
+   LABELS
+   ===================================================== */
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #d5d5d5;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* =====================================================
+   INPUTS / SELECT
+   ===================================================== */
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  height: 44px;
+
+  box-sizing: border-box;
+
+  padding: 0 13px;
+
+  border: 1px solid #303030;
+  border-radius: 7px;
+
+  outline: none;
+
+  background: #0c0c0c;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 13px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.form-group input::placeholder {
+  color: #666666;
+}
+
+.form-group input:hover,
+.form-group select:hover {
+  border-color: #444444;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  background: #101010;
+  border-color: #d4af37;
+
+  box-shadow:
+    0 0 0 2px rgba(212, 175, 55, 0.08);
+}
+
+/* SELECT */
+
+.form-group select {
+  appearance: none;
+
+  padding-right: 38px;
+
+  background-image:
+    linear-gradient(45deg, transparent 50%, #d4af37 50%),
+    linear-gradient(135deg, #d4af37 50%, transparent 50%);
+
+  background-position:
+    calc(100% - 17px) 18px,
+    calc(100% - 12px) 18px;
+
+  background-size:
+    5px 5px,
+    5px 5px;
+
+  background-repeat: no-repeat;
+}
+
+.form-group select option {
+  background: #111111;
+  color: #ffffff;
+}
+
+/* =====================================================
+   FOOTER DEL MODAL
+   ===================================================== */
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  padding: 18px 24px 22px;
+
+  border-top: 1px solid #292929;
+}
+
+/* BOTÓN CANCELAR */
+
+.btn-cancelar {
+  min-width: 105px;
+  height: 42px;
+
+  padding: 0 18px;
+
+  border: 1px solid #353535;
+  border-radius: 7px;
+
+  background: #171717;
+  color: #b5b5b5;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn-cancelar:hover {
+  background: #1d1d1d;
+  border-color: #d4af37;
+  color: #d4af37;
+}
+
+/* BOTÓN GUARDAR */
+
+.btn-guardar {
+  min-width: 145px;
+  height: 42px;
+
+  padding: 0 20px;
+
+  border: 1px solid #d4af37;
+  border-radius: 7px;
+
+  background: #d4af37;
+  color: #090909;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btn-guardar:hover {
+  background: #e0bd48;
+
+  box-shadow:
+    0 5px 18px rgba(212, 175, 55, 0.18);
+
+  transform: translateY(-1px);
+}
+
+.btn-guardar:active {
+  transform: translateY(0);
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 650px) {
+
+  .modal-overlay {
+    padding: 14px;
+  }
+
+  .insumo-modal {
+    max-height: calc(100vh - 28px);
+    border-radius: 12px;
+  }
+
+  .modal-header {
+    padding: 18px;
+  }
+
+  .modal-header h2 {
+    font-size: 19px;
+  }
+
+  .insumo-modal form {
+    padding: 18px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .form-group.full {
+    grid-column: auto;
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+
+    padding: 16px 18px 18px;
+  }
+
+  .btn-cancelar,
+  .btn-guardar {
+    width: 100%;
+  }
+}

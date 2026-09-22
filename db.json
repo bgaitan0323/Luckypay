@@ -1,0 +1,102 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "nombre": "Administrador",
+      "email": "admin@luckypay.com",
+      "rol": "admin",
+      "estado": "Activo"
+    },
+    {
+      "id": "2",
+      "nombre": "Empleado",
+      "email": "empleado@luckypay.com",
+      "rol": "empleado",
+      "estado": "Activo"
+    }
+  ],
+  "insumos": [
+    {
+      "id": "1",
+      "nombre": "Madera pino",
+      "unidad": "m",
+      "stock": 120,
+      "stockMinimo": 20,
+      "precio": 18000
+    },
+    {
+      "id": "2",
+      "nombre": "Tornillos acero",
+      "unidad": "unidad",
+      "stock": 850,
+      "stockMinimo": 100,
+      "precio": 350
+    },
+    {
+      "id": "3",
+      "nombre": "Pintura base",
+      "unidad": "litro",
+      "stock": 35,
+      "stockMinimo": 10,
+      "precio": 28000
+    },
+    {
+      "id": "4",
+      "nombre": "Tela tapizado",
+      "unidad": "metro",
+      "stock": 42,
+      "stockMinimo": 10,
+      "precio": 22000
+    },
+    {
+      "id": "5",
+      "nombre": "Espuma relleno",
+      "unidad": "kg",
+      "stock": 8,
+      "stockMinimo": 10,
+      "precio": 15000
+    },
+    {
+      "id": "6",
+      "nombre": "Barniz acabado",
+      "unidad": "litro",
+      "stock": 18,
+      "stockMinimo": 5,
+      "precio": 32000
+    }
+  ],
+  "productos": [
+    {
+      "id": "1",
+      "nombre": "Silla ergonómica mod. A",
+      "descripcion": "Silla de oficina con soporte lumbar ajustable.",
+      "unidad": "Unidad",
+      "manoObra": 85000
+    },
+    {
+      "id": "2",
+      "nombre": "Mesa de trabajo",
+      "descripcion": "Mesa industrial para taller o bodega.",
+      "unidad": "Unidad",
+      "manoObra": 100000
+    }
+  ],
+  "ventas": [
+    {
+      "id": "1",
+      "producto": "Silla ergonómica mod. A",
+      "cantidad": 2,
+      "total": 500000,
+      "fecha": "2026-09-19"
+    }
+  ],
+  "gastos": [
+    {
+      "id": "1",
+      "concepto": "Materiales",
+      "valor": 180000,
+      "fecha": "2026-09-19"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
